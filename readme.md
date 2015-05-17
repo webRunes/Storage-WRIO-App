@@ -1,9 +1,9 @@
-[![Build Status](https://travis-ci.org/webRunes/Login-WRIO-App.svg?branch=master)](https://travis-ci.org/webRunes/Login-WRIO-App)
+[![Build Status](https://travis-ci.org/webRunes/Storage-WRIO-App.svg?branch=master)](https://travis-ci.org/webRunes/Storage-WRIO-App)
 
-#Login <sup>[WRIO](http://wr.io) App</sup>
+#Storage <sup>[WRIO](http://wr.io) App</sup>
 (coming soon)
 
 ##Official Hub
-[https://login.webrunes.com](https://login.webrunes.com)
+[https://storage.webrunes.com](https://storage.webrunes.com)
 
 Powered by [Open Copyright](http://opencopyright.webrunes.com)
