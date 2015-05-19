@@ -1,13 +1,15 @@
-var nconf = require("./wrio_nconf.js").init();
-var express = require('express');
-var app = require("./wrio_app.js").init(express);
-var server = require('http').createServer(app).listen(nconf.get("server:port"));
+language: node_js
 
-app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
+node_js:
+  - 0.10
 
-app.get('/', function (request, response) {
+install : npm install
+script  : npm start
 
-    response.render('storage.ejs',{});
-
-});
+deploy:
+  provider: opsworks
+  access_key_id:
+    secure: TicDHBPmhH0o9dS5ClsMRyYxI2vWYHtW/jaVUC0TVOnRRD4hnNrgEwLSVcQwnPFwPlL3jbep1or8XWjcECHortE4N3foJcutBonufZ53oq6+GojDdO6efR4hapa8TgAIWSsceD+1XSdfQUpIafK07QWUNKEC684+Meb9Uz7TOto=
+  secret_access_key:
+    secure: YHxhDWtmblCtD5aqe67Z1/YhgpGqok0k3eN0pHNrmEJx1s0eUgQk9F7m3kGVgbk8JfzxrQ6EKlWapihJ3bg/vf9VjaN/NSgZqbO9QeIr95wC6YTlAfX65KPr3V7UnHtEYl0EgcKU2sfgoZvWcn999adWmFaITi1dcGzQLBCLb9k=
+  app-id: 6e01127a-61aa-450f-b054-1fa116003147
