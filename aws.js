@@ -12,7 +12,7 @@ var s3 = new AWS.S3({
 });
 
 var indexTemplate = "index  loading...";
-var coverTemplate = "conver loading...";
+var coverTemplate = "cover loading...";
 
 // get templates we will be working on
 

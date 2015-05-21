@@ -65,30 +65,21 @@ app.get('/', function (request, response) {
             wrioLogin.storageCreateTempRecord(request.sessionID, function(err,data) {
                 if (err) {
                     console.log(err);
+                    return;
                 }
-                var id = wrioLogin.convertDbIDtoUserID(data);
-                returndays(response,deltadays,id);
+                var id = data;
+                returndays(response,0,id);
                 console.log(id);
                 aws.createTemplates(id);
-                returndays(response,0);
             });
         } else {
             var delta = new Date().getTime() - data.expire_date;
             var deltadays = Math.round(delta / (24*60*60*1000));
             console.log("Session exists",delta,deltadays);
-            returndays(response,deltadays,wrioLogin.convertDbIDtoUserID(data.id));
+            returndays(response,deltadays,data.id);
         }
     });
 
-  /*  wrioLogin.loginWithSessionId(request.sessionID,function(err,res) {
-        if (err) {
-            console.log("User not found")
-            response.render('index.ejs',{"error":"Not logged in","user":undefined});
-        } else {
-            response.render('index.ejs',{"user":res});
-            console.log("User found "+res);
-        }
-    })*/
 });
 
 

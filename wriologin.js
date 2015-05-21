@@ -116,14 +116,29 @@ function getTwitterCredentials(sessionId,done) {
     });
 }
 
-module.exports.convertDbIDtoUserID = function (id) {
+var EXPIRY_TIME = 30*24*60*60*1000;
 
-    var random_key = 4278986441199;
-    return id ^ random_key;
-
+var checkIdExists = function (session,exists) {
+    var query = "SELECT * FROM `user_profiles` WHERE id = ?";
+    connection.query(query, [session], function (err, rows) {
+        if (err) {
+            console.log("Select error", err);
+            exists(false);
+            return;
+        }
+        console.log(rows);
+        if (rows.length == 0) {
+            console.log("Got none");
+            exists(false);
+        } else {
+            console.log("Got something");
+            exists(true);
+        }
+        return;
+    });
 };
 
-var EXPIRY_TIME = 30*24*60*60*1000;
+
 
 module.exports.checkSessionExists = function (session,exists) {
     var query = "SELECT * FROM `user_profiles` WHERE session = ?";
@@ -147,15 +162,26 @@ module.exports.checkSessionExists = function (session,exists) {
 
 module.exports.storageCreateTempRecord = function (session,done) {
 
-    var insertQuery = "INSERT INTO `user_profiles` ( temporary, expire_date, session ) values (?, ?, ?);";
-    connection.query(insertQuery, [true,new Date().getTime(),session], function (err, rows) {
-        if (err) {
-            console.log("Create error", err);
-            return;
-        }
-        console.log("Insert query done "+rows.insertId);
-        done(null,rows.insertId);
+
+    var id = Math.round(Math.random()*9999999999);
+
+    checkIdExists(id, function(exists) {
+       if (exists) {
+           module.exports.storageCreateTempRecord(session,done);
+       } else {
+           var insertQuery = "INSERT INTO `user_profiles` ( id, temporary, expire_date, session ) values (?, ?, ?, ?);";
+           connection.query(insertQuery, [id,true,new Date().getTime(),session], function (err, rows) {
+               if (err) {
+                   console.log("Create error", err);
+                   done(err);
+                   return;
+               }
+               console.log("Insert query done "+rows.insertId);
+               done(null,rows.insertId);
+           });
+       }
     });
+
 
 }
 
