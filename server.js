@@ -51,8 +51,9 @@ app.use(session(
     }
 ));
 
-function returndays(response,days) {
-    response.render('index.ejs',{"url":"http://webrunes.com","days":30-days});
+function returndays(response,days,url) {
+    url = "webrunes.s3.amazonaws.com/"+url+'/index.htm';
+    response.render('index.ejs',{"url":url,"days":30-days});
 }
 
 app.get('/', function (request, response) {
@@ -65,8 +66,8 @@ app.get('/', function (request, response) {
                 if (err) {
                     console.log(err);
                 }
-                returndays(response,deltadays);
                 var id = wrioLogin.convertDbIDtoUserID(data);
+                returndays(response,deltadays,id);
                 console.log(id);
                 aws.createTemplates(id);
                 returndays(response,0);
@@ -75,7 +76,7 @@ app.get('/', function (request, response) {
             var delta = new Date().getTime() - data.expire_date;
             var deltadays = Math.round(delta / (24*60*60*1000));
             console.log("Session exists",delta,deltadays);
-            returndays(response,deltadays);
+            returndays(response,deltadays,wrioLogin.convertDbIDtoUserID(data.id));
         }
     });
 
