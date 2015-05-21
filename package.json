@@ -26,7 +26,13 @@
 	"nconf": "*",
 	"aws-sdk-apis": "*",
 	"supervisor": "*",
-	"aws-sdk":"*"
+	"aws-sdk":"*",
+	"ejs":"*",
+	"mysql":"*",
+	"cookie-parser":"*",
+	"express-session":"*",
+	"express-mysql-session":"*"
+
   },
   "devDependencies": {},
   "scripts": {
