@@ -51,12 +51,35 @@ app.use(session(
     }
 ));
 
+function returndays(response,days) {
+    response.render('index.ejs',{"url":"http://webrunes.com","days":30-days});
+}
 
 app.get('/', function (request, response) {
 
-
     console.log(request.sessionID);
-    wrioLogin.loginWithSessionId(request.sessionID,function(err,res) {
+    wrioLogin.checkSessionExists(request.sessionID, function(exists,data) {
+        if (!exists) {
+            console.log("Session not exists");
+            wrioLogin.storageCreateTempRecord(request.sessionID, function(err,data) {
+                if (err) {
+                    console.log(err);
+                }
+                returndays(response,deltadays);
+                var id = wrioLogin.convertDbIDtoUserID(data);
+                console.log(id);
+                aws.createTemplates(id);
+                returndays(response,0);
+            });
+        } else {
+            var delta = new Date().getTime() - data.expire_date;
+            var deltadays = Math.round(delta / (24*60*60*1000));
+            console.log("Session exists",delta,deltadays);
+            returndays(response,deltadays);
+        }
+    });
+
+  /*  wrioLogin.loginWithSessionId(request.sessionID,function(err,res) {
         if (err) {
             console.log("User not found")
             response.render('index.ejs',{"error":"Not logged in","user":undefined});
@@ -64,7 +87,7 @@ app.get('/', function (request, response) {
             response.render('index.ejs',{"user":res});
             console.log("User found "+res);
         }
-    })
+    })*/
 });
 
 

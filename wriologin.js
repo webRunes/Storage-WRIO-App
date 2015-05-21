@@ -7,6 +7,7 @@
 
 var nconf = require("./wrio_nconf.js").init();
 var mysql = require('mysql');
+var a
 
 MYSQL_HOST = nconf.get("db:host");
 MYSQL_USER = nconf.get("db:user");
@@ -113,6 +114,49 @@ function getTwitterCredentials(sessionId,done) {
             }
         }
     });
+}
+
+module.exports.convertDbIDtoUserID = function (id) {
+
+    var random_key = 4278986441199;
+    return id ^ random_key;
+
+};
+
+var EXPIRY_TIME = 30*24*60*60*1000;
+
+module.exports.checkSessionExists = function (session,exists) {
+    var query = "SELECT * FROM `user_profiles` WHERE session = ?";
+    connection.query(query, [session], function (err, rows) {
+        if (err) {
+            console.log("Select error", err);
+            exists(false);
+            return;
+        }
+        console.log(rows);
+        if (rows.length == 0) {
+            console.log("Got none");
+            exists(false);
+        } else {
+            console.log("Got something");
+            exists(true,rows[0]);
+        }
+        return;
+    });
+};
+
+module.exports.storageCreateTempRecord = function (session,done) {
+
+    var insertQuery = "INSERT INTO `user_profiles` ( temporary, expire_date, session ) values (?, ?, ?);";
+    connection.query(insertQuery, [true,new Date().getTime(),session], function (err, rows) {
+        if (err) {
+            console.log("Create error", err);
+            return;
+        }
+        console.log("Insert query done "+rows.insertId);
+        done(null,rows.insertId);
+    });
+
 }
 
 module.exports.loginWithSessionId = loginWithSessionId;

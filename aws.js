@@ -11,41 +11,66 @@ var s3 = new AWS.S3({
     //endpoint: "http://webrunes.s3-website-us-east-1.amazonaws.com/"
 });
 
+var indexTemplate = "index  loading...";
+var coverTemplate = "conver loading...";
+
+// get templates we will be working on
 
 var params = {
-    Body:"Hello!",
-    Key:"test/index.html",
-    ACL:'public-read',
-    ContentType:"text/html"
+    Bucket:'wrio',
+    Key: "Login-WRIO-App/default/index.htm"
 };
-
-s3.upload(params,function (err,res) {
+s3.getObject(params,function(err,res) {
     if (err) {
-        console.log(err);
+        console.log("Can't get index template ",err);
+        return;
     }
-    console.log(res);
+    indexTemplate = res.Body.toString();
 });
-
-
 var params = {
-    Bucket: 'wrio' /* required */
+    Bucket:'wrio',
+    Key: "Login-WRIO-App/default/cover.htm"
 };
-s3.getBucketWebsite(params, function(err, data) {
-    if (err) console.log(err, err.stack); // an error occurred
-    else     console.log(data);           // successful response
+s3.getObject(params,function(err,res) {
+    if (err) {
+        console.log("Can't get index template ",err);
+        return;
+    }
+    coverTemplate = res.Body.toString();
 });
 
-module.exports.createRandomID = function () {
 
-}
 
-/*
-var params = {
-    Bucket: 'webrunes'
+module.exports.createTemplates = function (userID) {
+
+    var params = {
+        Body:indexTemplate,
+        Key:userID+"/index.htm",
+        ACL:'public-read',
+        ContentType:"text/html"
+    };
+
+    s3.upload(params,function (err,res) {
+        if (err) {
+            console.log(err);
+        }
+        console.log(res);
+    });
+
+    params = {
+        Body:coverTemplate,
+        Key:userID+"/cover.htm",
+        ACL:'public-read',
+        ContentType:"text/html"
+    };
+
+    s3.upload(params,function (err,res) {
+        if (err) {
+            console.log(err);
+        }
+        console.log(res);
+    });
+
+
 };
 
-s3.getBucketWebsite(params, function(err, data) {
-    if (err) console.log(err, err.stack); // an error occurred
-    else     console.log(data);           // successful response
-});
-*/
