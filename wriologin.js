@@ -7,7 +7,6 @@
 
 var nconf = require("./wrio_nconf.js").init();
 var mysql = require('mysql');
-var a
 
 MYSQL_HOST = nconf.get("db:host");
 MYSQL_USER = nconf.get("db:user");
@@ -183,7 +182,9 @@ module.exports.storageCreateTempRecord = function (session,done) {
     });
 
 
-}
+};
+
+
 
 module.exports.loginWithSessionId = loginWithSessionId;
 module.exports.getTwitterCredentials = getTwitterCredentials;
