@@ -5,6 +5,11 @@
     <title></title>
 </head>
 <body>
-<a href="http://<%= url %>">Upgrade guest account for free <%= days %> days left</a>
-</body>
+<a href="wrio-account-edit.htm">
+
+<a href="http://<%= url %>">
+    <span className="glyphicon glyphicon-arrow-up">>Upgrade guest account for free</span>
+    {this.state.upgrade.text}
+</a>
+<span className="label label-warning"><%= days %> days left</span>
 </html>
