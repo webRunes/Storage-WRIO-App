@@ -5,6 +5,14 @@
     <title></title>
 </head>
 <body>
-<a href="http://<%= url %>">Upgrade guest account for free <%= days %> days left</a>
+<script type="text/javascript">
+    var url= "http://<%= url %>";
+    var days = "<%= days %>";
+    var tuple = {
+        days:days,
+        url:url
+    };
+    parent.postMessage(JSON.stringify(tuple), "*");
+</script>
 </body>
 </html>
