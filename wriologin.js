@@ -160,9 +160,9 @@ module.exports.checkSessionExists = function (session,exists) {
 };
 
 module.exports.storageCreateTempRecord = function (session,done) {
-
-
-    var id = Math.round(Math.random()*9999999999);
+    var min = 100000000000;
+    var max = 999999999999;
+    var id = Math.floor(Math.random()*(max - min) + min);
 
     checkIdExists(id, function(exists) {
        if (exists) {
