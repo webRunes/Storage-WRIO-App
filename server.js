@@ -52,7 +52,7 @@ app.use(session(
 ));
 
 function returndays(response,days,url) {
-    url = "webrunes.s3.amazonaws.com/"+url+'/index.htm';
+    url = "webrunes.s3-website-us-east-1.amazonaws.com/"+url+'/index.htm';
     response.render('index.ejs',{"url":url,"days":30-days});
 }
 
