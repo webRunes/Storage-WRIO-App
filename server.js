@@ -17,6 +17,9 @@ var cookieParser = require('cookie-parser');
 
 
 
+
+
+
 MYSQL_HOST = nconf.get("db:host");
 MYSQL_USER = nconf.get("db:user");
 MYSQL_PASSWORD = nconf.get("db:password");
@@ -50,6 +53,8 @@ app.use(session(
         key: 'sid'
     }
 ));
+
+
 
 function returndays(response,days,url) {
     url = "webrunes.s3.amazonaws.com/"+url+'/index.htm';
