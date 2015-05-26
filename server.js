@@ -33,7 +33,7 @@ var session_options = {
     user: MYSQL_USER,
     password: MYSQL_PASSWORD,
     database: MYSQL_DB
-}
+};
 
 var cookie_secret = nconf.get("server:cookiesecret");
 var sessionStore = new SessionStore(session_options);
@@ -64,6 +64,64 @@ function returndays(response,days,url) {
 app.get('/', function (request, response) {
 
     console.log(request.sessionID);
+    wrioLogin.checkSessionExists(request.sessionID, function(exists,data) {
+        if (!exists) {
+            console.log("Session not exists");
+            wrioLogin.storageCreateTempRecord(request.sessionID, function(err,data) {
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+                var id = data;
+                returndays(response,0,id);
+                console.log(id);
+                aws.createTemplates(id);
+            });
+        } else {
+            var delta = new Date().getTime() - data.expire_date;
+            var deltadays = Math.round(delta / (24*60*60*1000));
+            console.log("Session exists",delta,deltadays);
+            returndays(response,deltadays,data.id);
+        }
+    });
+
+});
+// *******
+// http://storage.webrunes.com/api/save
+
+// POST PARAMETERS
+// url: target url
+// contents : target body
+
+// POST REQUEST
+
+app.get("/api/test", function (request,response) {
+
+    response.render('api_test.ejs',{});
+
+});
+
+app.post('/api/save', function (request, response) {
+    console.log("Save API called");
+    console.log(request.sessionID);
+
+    var url = request.body.url;
+    var bodyData = request.body.fileData;
+
+    if (!url || !bodyData) {
+        console.log("Wrog parameters");
+        response.status(403);
+        response.send('Wrong parameters');
+        return
+    }
+
+    if (!request.sessionID) {
+        console.log("No session data");
+        response.status(401);
+        response.send('Not authorized');
+        return;
+    }
+
     wrioLogin.checkSessionExists(request.sessionID, function(exists,data) {
         if (!exists) {
             console.log("Session not exists");
