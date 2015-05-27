@@ -88,7 +88,7 @@ module.exports.saveFile = function (userID,path,file,done) {
             return;
         }
         console.log("File uploaded to s3",res);
-        done(null,null);
+        done(null,res.Location);
     });
 
 
