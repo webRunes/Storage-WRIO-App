@@ -39,8 +39,6 @@ s3.getObject(params,function(err,res) {
     coverTemplate = res.Body.toString();
 });
 
-
-
 module.exports.createTemplates = function (userID) {
 
     var params = {
@@ -70,6 +68,30 @@ module.exports.createTemplates = function (userID) {
         }
         console.log(res);
     });
+
+
+};
+
+module.exports.saveFile = function (userID,path,file,done) {
+
+    var params = {
+        Body:file,
+        Key:userID+'/'+path,
+        ACL:'public-read',
+        ContentType:"text/html"
+    };
+
+    s3.upload(params,function (err,res) {
+        if (err) {
+            console.log(err);
+            done("Cant write file");
+            return;
+        }
+        console.log("File uploaded to s3",res);
+        done(null,null);
+    });
+
+
 
 
 };
