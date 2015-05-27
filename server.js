@@ -14,6 +14,9 @@ var wrioLogin = require('./wriologin');
 var session = require('express-session');
 var SessionStore = require('express-mysql-session');
 var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+
+
 
 
 
@@ -30,7 +33,7 @@ var session_options = {
     user: MYSQL_USER,
     password: MYSQL_PASSWORD,
     database: MYSQL_DB
-}
+};
 
 var cookie_secret = nconf.get("server:cookiesecret");
 var sessionStore = new SessionStore(session_options);
@@ -51,14 +54,38 @@ app.use(session(
     }
 ));
 
+app.use(bodyParser.urlencoded());
+
 function returndays(response,days,url) {
     url = "webrunes.s3-website-us-east-1.amazonaws.com/"+url+'/index.htm';
     response.render('index.ejs',{"url":url,"days":30-days});
 }
 
+function getUserProfile(sid, done) {
+    wrioLogin.checkSessionExists(request.sessionID, function(exists,user_profile) {
+        if (!user_profile) {
+            console.log("User profile not exists, creating...");
+            wrioLogin.storageCreateTempRecord(request.sessionID, function(err,id) {
+                if (err) {
+                    console.log(err);
+                    done("Create record failed");
+                    return;
+                }
+                done(null, id);
+            });
+        } else {
+            done(null,user_profile.id);
+        }
+    });
+
+}
+
 app.get('/', function (request, response) {
 
     console.log(request.sessionID);
+    createTempAccountForSid(sid,function (err,result) {
+
+    });
     wrioLogin.checkSessionExists(request.sessionID, function(exists,data) {
         if (!exists) {
             console.log("Session not exists");
@@ -81,6 +108,56 @@ app.get('/', function (request, response) {
     });
 
 });
+// *******
+// http://storage.webrunes.com/api/save
+
+// POST PARAMETERS
+// url: target url
+// contents : target body
+
+// POST REQUEST
+
+app.get("/api/test", function (request,response) {
+
+    response.render('api_test.ejs',{});
+
+});
+
+app.post('/api/save', function (request, response) {
+    console.log("Save API called");
+    response.set('Content-Type', 'application/json');
+    console.log(request.sessionID);
+
+    var url = request.body.url;
+    var bodyData = request.body.bodyData;
+
+    if (!url || !bodyData) {
+        console.log("Wrong parameters");
+        response.status(403);
+        response.send({"error":'Wrong parameters'});
+        return
+    }
+
+    if (!request.sessionID) {
+        console.log("No session data");
+        response.status(401);
+        response.send({"error":'Not authorized'});
+        return;
+    }
+
+    getUserProfile(request.sessionID,function (err,id) {
+        console.log("Got user profile",id);
+        aws.saveFile(id,url,bodyData,function(err,done) {
+            if (err) {
+                response.send({"error":'Not authorized'});
+                return;
+            }
+            response.send({"success":'true'});
+        });
+
+    });
+
+});
 
 
 app.get('/logoff',function(request,response) {
@@ -89,3 +166,5 @@ app.get('/logoff',function(request,response) {
     response.redirect('/');
 
 });
+
+module.exports = app;

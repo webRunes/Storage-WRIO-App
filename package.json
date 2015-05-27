@@ -4,49 +4,49 @@
   "description": "https://github.com/webRunes/Titter-WRIO-App/",
   "main": "gm-test.js",
   "dependencies": {
-	"express": "4.9.4",
-	"media-typer": "*",
-	"qs": "*",
-	"etag": "*",
-	"on-finished": "*",
-	"proxy-addr": "*",
-	"ms": "*",
-	"depd": "*",
-	"destroy": "*",
-	"finalhandler": "*",
-	"utils-merge": "*",
-	"debug": "*",
-	"body-parser": "*",
-	"when": "~3.1.0",
-	"http": "~0.0",
-	"mysql": "~2.5",
-	"jade": "1.7",
-	"xmlbuilder": "*",
-	"xml2js": "*",
-	"nconf": "*",
-	"aws-sdk-apis": "*",
-	"supervisor": "*",
-	"aws-sdk":"*",
-	"ejs":"*",
-	"mysql":"*",
-	"cookie-parser":"*",
-	"express-session":"*",
-	"express-mysql-session":"*"
-
+    "express": "4.9.4",
+    "media-typer": "*",
+    "qs": "*",
+    "etag": "*",
+    "on-finished": "*",
+    "proxy-addr": "*",
+    "ms": "*",
+    "depd": "*",
+    "destroy": "*",
+    "finalhandler": "*",
+    "utils-merge": "*",
+    "debug": "*",
+    "body-parser": "*",
+    "when": "~3.1.0",
+    "http": "~0.0",
+    "mysql": "*",
+    "jade": "1.7",
+    "xmlbuilder": "*",
+    "xml2js": "*",
+    "nconf": "*",
+    "aws-sdk-apis": "*",
+    "supervisor": "*",
+    "aws-sdk": "*",
+    "ejs": "*",
+    "cookie-parser": "*",
+    "express-session": "*",
+    "express-mysql-session": "*"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "mocha": "^2.2.5",
+    "supertest": "^1.0.1"
+  },
   "scripts": {
-	"start": "echo \"Build Completed.\" "
+    "start": "echo \"Build Completed.\" "
   },
   "repository": {
-	"type": "git",
-	"url": "https://github.com/webRunes/Storage-WRIO-App.git"
+    "type": "git",
+    "url": "https://github.com/webRunes/Storage-WRIO-App.git"
   },
   "author": "webRunes",
-  "license": "MIT",
+  "license": "Open Copyright",
   "bugs": {
-	"url": "https://github.com/webRunes/Storage-WRIO-App/issues"
+    "url": "https://github.com/webRunes/Storage-WRIO-App/issues"
   },
   "homepage": "https://github.com/webRunes/Storage-WRIO-App"
 }
-

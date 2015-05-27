@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script type="text/javascript">
+    var url = "/index.html";
+    var contents = "<html></html>";
+    $.ajax({
+        url: "/api/save",
+        type: 'post',
+            'dataType':'json',
+//            'fileData': imageData,
+            data: {
+                'url': url,
+                'bodyData': contents
+            }
+    });
+
+
+</script>
+
+</body>
+</html>
