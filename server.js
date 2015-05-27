@@ -168,23 +168,3 @@ app.get('/logoff',function(request,response) {
 });
 
 module.exports = app;
-var request = require('supertest');
-postdata = {
-    url:"main.html",
-    bodyData:"<html></html>"
-};
-setTimeout(function() {
-
-    request(app)
-        .post('/api/save')
-        .send(postdata)
-        //        .field('url', 'index.html')
-        //        .attach('bodydata', 'test/index.html')
-        .expect('Content-Type', /json/)
-        .expect(200,{"success":"true"})
-        .expect('set-cookie', /sid/)
-        .end(function(err, res){
-            if (err) throw err;
-
-        });
-},2000);
