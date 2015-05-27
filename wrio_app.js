@@ -7,6 +7,7 @@ exports.init = function (express) {
     app.use(function (request, response, next) {
         //console.log(request);
         response.setHeader('Access-Control-Allow-Origin', 'http://webrunes.com');
+        response.setHeader('Access-Control-Allow-Origin', 'http://core.webrunes.com');
         response.setHeader('Access-Control-Allow-Origin', 'http://localhost:63344');
         response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
         response.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
