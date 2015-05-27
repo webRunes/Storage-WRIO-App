@@ -62,10 +62,10 @@ function returndays(response,days,url) {
 }
 
 function getUserProfile(sid, done) {
-    wrioLogin.checkSessionExists(request.sessionID, function(exists,user_profile) {
+    wrioLogin.checkSessionExists(sid, function(exists,user_profile) {
         if (!user_profile) {
             console.log("User profile not exists, creating...");
-            wrioLogin.storageCreateTempRecord(request.sessionID, function(err,id) {
+            wrioLogin.storageCreateTempRecord(sid, function(err,id) {
                 if (err) {
                     console.log(err);
                     done("Create record failed");
@@ -83,9 +83,6 @@ function getUserProfile(sid, done) {
 app.get('/', function (request, response) {
 
     console.log(request.sessionID);
-    createTempAccountForSid(sid,function (err,result) {
-
-    });
     wrioLogin.checkSessionExists(request.sessionID, function(exists,data) {
         if (!exists) {
             console.log("Session not exists");
@@ -113,7 +110,7 @@ app.get('/', function (request, response) {
 
 // POST PARAMETERS
 // url: target url
-// contents : target body
+// bodyData : target body
 
 // POST REQUEST
 
@@ -147,12 +144,15 @@ app.post('/api/save', function (request, response) {
 
     getUserProfile(request.sessionID,function (err,id) {
         console.log("Got user profile",id);
-        aws.saveFile(id,url,bodyData,function(err,done) {
+        aws.saveFile(id,url,bodyData,function(err,res) {
             if (err) {
                 response.send({"error":'Not authorized'});
                 return;
             }
-            response.send({"success":'true'});
+            response.send({
+                "success":'true',
+                "url":res.replace('https://','http://') // remove this when switch to https
+            });
         });
 
     });
