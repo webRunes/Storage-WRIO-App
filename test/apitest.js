@@ -33,7 +33,7 @@ describe("Save api tests", function() {
 
     });
 
-    it("shuld raise error because of wrong parameters",function(done) {
+    it("should raise error because of wrong parameters",function(done) {
         request(app)
             .post('/api/save')
             .expect('Content-Type', /json/)
