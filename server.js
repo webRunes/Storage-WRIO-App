@@ -56,53 +56,33 @@ app.use(session(
 
 app.use(bodyParser.urlencoded());
 
-function returndays(response,days,url) {
-    url = "webrunes.s3-website-us-east-1.amazonaws.com/"+url+'/index.htm';
-    response.render('index.ejs',{"url":url,"days":30-days});
+function returndays(j,days,url) {
+    j['url'] = "webrunes.s3.amazonaws.com/"+url+'/index.htm';
+    j['days'] = 30 - days;
+
 }
 
 function getUserProfile(sid, done) {
     wrioLogin.checkSessionExists(sid, function(exists,user_profile) {
         if (!user_profile) {
             console.log("User profile not exists, creating...");
-            wrioLogin.storageCreateTempRecord(sid, function(err,id) {
+            wrioLogin.storageCreateTempRecord(sid, function(err, id, profile) {
                 if (err) {
                     console.log(err);
                     done("Create record failed");
                     return;
                 }
-                done(null, id);
+                done(null, id, profile);
             });
         } else {
-            done(null,user_profile.id);
+            done(null,user_profile.id,user_profile);
         }
     });
-
 }
 
 app.get('/', function (request, response) {
 
-    console.log(request.sessionID);
-    wrioLogin.checkSessionExists(request.sessionID, function(exists,data) {
-        if (!exists) {
-            console.log("Session not exists");
-            wrioLogin.storageCreateTempRecord(request.sessionID, function(err,data) {
-                if (err) {
-                    console.log(err);
-                    return;
-                }
-                var id = data;
-                returndays(response,0,id);
-                console.log(id);
-                aws.createTemplates(id);
-            });
-        } else {
-            var delta = new Date().getTime() - data.expire_date;
-            var deltadays = Math.round(delta / (24*60*60*1000));
-            console.log("Session exists",delta,deltadays);
-            returndays(response,deltadays,data.id);
-        }
-    });
+    response.send("<html><body>Use /api/ calls to use storage</body></html>");
 
 });
 // *******
@@ -150,12 +130,38 @@ app.post('/api/save', function (request, response) {
                 return;
             }
             response.send({
-                "success":'true',
+                "result":"success",
                 "url":res.replace('https://','http://') // remove this when switch to https
             });
         });
 
     });
+
+});
+
+app.post('/api/get_profile', function (request, response) {
+
+    console.log(request.sessionID);
+    var json_resp = {
+        "result":"success"
+    };
+
+    response.set('Content-Type', 'application/json');
+    response.set('Content-Type', 'application/json');
+    getUserProfile(request.sessionID,function (err, id, profile) {
+        console.log("Got user profile",id);
+        // return profile expire time
+        var delta = new Date().getTime() - profile.expire_date;
+        var deltadays = Math.round(delta / (24*60*60*1000));
+        console.log("Session exists",delta,deltadays);
+        json_resp['temporary'] = true;
+        json_resp['id'] = id;
+        returndays(json_resp,deltadays,id);
+        response.send(json_resp);
+
+    });
+
+
 
 });
 
@@ -168,3 +174,7 @@ app.get('/logoff',function(request,response) {
 });
 
 module.exports = app;
+
+//var request = require('supertest');
+//var assert = require('assert');
+

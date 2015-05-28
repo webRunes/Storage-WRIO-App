@@ -166,17 +166,23 @@ module.exports.storageCreateTempRecord = function (session,done) {
 
     checkIdExists(id, function(exists) {
        if (exists) {
-           module.exports.storageCreateTempRecord(session,done);
+           module.exports.storageCreateTempRecord(session,done); // call ourselves until we find unique ID
        } else {
+           var profile = {
+               id:id,
+               temporary:true,
+               expire_date:new Date().getTime(),
+               "session":session
+           };
            var insertQuery = "INSERT INTO `user_profiles` ( id, temporary, expire_date, session ) values (?, ?, ?, ?);";
-           connection.query(insertQuery, [id,true,new Date().getTime(),session], function (err, rows) {
+           connection.query(insertQuery, [id,true,profile.expire_date,session], function (err, rows) {
                if (err) {
                    console.log("Create error", err);
                    done(err);
                    return;
                }
                console.log("Insert query done "+rows.insertId);
-               done(null,rows.insertId);
+               done(null,rows.insertId,profile);
            });
        }
     });
