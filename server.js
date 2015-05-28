@@ -59,6 +59,7 @@ app.use(bodyParser.urlencoded());
 function returndays(j,days,url) {
     j['url'] = "webrunes.s3.amazonaws.com/"+url+'/index.htm';
     j['days'] = 30 - days;
+
 }
 
 function getUserProfile(sid, done) {
