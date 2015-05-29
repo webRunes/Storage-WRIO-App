@@ -181,24 +181,5 @@ app.get('/logoff',function(request,response) {
 
 module.exports = app;
 
-var request = require('supertest');
-var should = require('should');
-
-request(app)
-    .post('/api/get_profile')
-    .expect('Content-Type', /json/)
-    .expect(200)
-    .end(function (err, res) {
-        if (err) throw err;
-        var resp = res.body;
-        console.log(resp);
-
-        should(resp).have.property("result","success");
-        should(resp).have.property("temporary",true);
-        should(resp).have.property("days",30);
-
-        var id = resp.id.toString();
-        should(id.length).equal(12); // there must be 12 digit id
-
-
-    });
+//var request = require('supertest');
+//var should = require('should');
