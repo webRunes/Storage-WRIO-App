@@ -57,7 +57,8 @@ app.use(session(
 app.use(bodyParser.urlencoded());
 
 function returndays(j,days,url) {
-    j['url'] = "webrunes.s3.amazonaws.com/"+url+'/index.htm';
+    j['url'] = "http://webrunes.s3-website-us-east-1.amazonaws.com/"+url+'/';
+    j['cover'] = j['url']+'cover.htm';
     j['days'] = 30 - days;
 
 }
@@ -149,8 +150,13 @@ app.post('/api/get_profile', function (request, response) {
     response.set('Content-Type', 'application/json');
     response.set('Content-Type', 'application/json');
     getUserProfile(request.sessionID,function (err, id, profile) {
+        if (err) {
+            response.send({"error":"Can't get user profile"});
+            return;
+        }
         console.log("Got user profile",id);
         // return profile expire time
+        aws.createTemplates(id);
         var delta = new Date().getTime() - profile.expire_date;
         var deltadays = Math.round(delta / (24*60*60*1000));
         console.log("Session exists",delta,deltadays);
@@ -176,5 +182,4 @@ app.get('/logoff',function(request,response) {
 module.exports = app;
 
 //var request = require('supertest');
-//var assert = require('assert');
-
+//var should = require('should');
