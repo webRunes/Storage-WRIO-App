@@ -13,7 +13,7 @@ exports.init = function (express) {
             console.log("Allowing CORS for localhost");
         }
 
-        if (host.match(/\.webrunes\.com:[0-9]+$/m)) {
+        if (host.match(/\.webrunes\.com$/m)) {
             response.setHeader('Access-Control-Allow-Origin', host);
             console.log("Allowing CORS for webrunes domains");
         }
