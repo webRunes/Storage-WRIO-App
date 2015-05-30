@@ -57,7 +57,7 @@ app.use(session(
 app.use(bodyParser.urlencoded());
 
 function returndays(j,days,url) {
-    j['url'] = "http://webrunes.s3-website-us-east-1.amazonaws.com/"+url+'/';
+    j['url'] = "http://wr.io/"+url+'/';
     j['cover'] = j['url']+'cover.htm';
     j['days'] = 30 - days;
 
