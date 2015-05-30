@@ -5,8 +5,21 @@ exports.init = function (express) {
     var bodyParser = require('body-parser');
     // Add headers
     app.use(function (request, response, next) {
-        //console.log(request);
-        response.setHeader('Access-Control-Allow-Origin', 'http://localhost:8081');
+        var host = request.headers.host;
+        console.log(host);
+
+        if (host.match(/^localhost:[0-9]+$/m)) {
+            response.setHeader('Access-Control-Allow-Origin', host);
+            console.log("Allowing CORS for localhost");
+        }
+
+        if (host.match(/\.webrunes\.com$/m)) {
+            response.setHeader('Access-Control-Allow-Origin', host);
+            console.log("Allowing CORS for webrunes domains");
+        }
+
+
+        response.setHeader('Access-Control-Allow-Origin', 'http://core.webrunes.com');
         response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
         response.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
         response.setHeader('Access-Control-Allow-Credentials', true);

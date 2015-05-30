@@ -35,6 +35,8 @@ function handleDisconnect() {
             console.log("Connecting to db...")
             connection.query('USE '+MYSQL_DB);
 
+            //profileTime();
+
             var d = new Date().getTime() - 30*24*60*60*1000;  // 30 days
             getExpiredProfiles(d,function(data) {
                 if (data) {
@@ -97,6 +99,25 @@ function handleDisconnect() {
 }
 
 handleDisconnect();
+
+
+var profileTime = function (time,exists) {
+    var query = "SELECT * FROM `user_profiles` ORDER BY `expire_date`";
+
+    connection.query(query, [], function (err, rows) {
+        if (err) {
+            console.log("Expire error", err);
+            exists(null);
+            return;
+        }
+        //  console.log(rows);
+        for (var i in rows) {
+            var row = rows[i];
+            console.log(Math.round(( new Date().getTime() - row.expire_date)/(1000*60*60))+" hours");
+        }
+        return;
+    });
+};
 
 var getExpiredProfiles = function (time,exists) {
     var query = "SELECT * FROM `user_profiles` WHERE expire_date < ?";
