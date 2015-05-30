@@ -8,8 +8,17 @@
 
 <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
 <script type="text/javascript">
-    var url = "/index.html";
+    var url = "/webtest.html";
     var contents = "<html></html>";
+
+    $.ajax({
+        url: "/api/get_profile",
+        type: 'post',
+        'dataType':'json',
+//            'fileData': imageData,
+        data: {}
+    });
+
     $.ajax({
         url: "/api/save",
         type: 'post',
