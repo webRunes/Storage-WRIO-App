@@ -75,7 +75,7 @@ module.exports.saveFile = function (userID,path,file,done) {
 
     var params = {
         Body:file,
-        Key:userID+path,
+        Key:userID+'/'+path,
         ACL:'public-read',
         ContentType:"text/html"
     };
