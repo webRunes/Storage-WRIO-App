@@ -61,7 +61,7 @@ app.get('/', function (request, response) {
     console.log(request.sessionID);
     wrioLogin.checkSessionExists(request.sessionID, function(exists,data) {
         if (!exists) {
-            console.log("Session not exists");
+            console.log("Session not exists in user_profiles");
             wrioLogin.storageCreateTempRecord(request.sessionID, function(err,data) {
                 if (err) {
                     console.log(err);
