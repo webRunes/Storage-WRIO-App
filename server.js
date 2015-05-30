@@ -154,7 +154,7 @@ app.post('/api/get_profile', function (request, response) {
             response.send({"error":"Can't get user profile"});
             return;
         }
-        console.log("Got user profile",id);
+        console.log("Got user profile",id, " creating templates");
         // return profile expire time
         aws.createTemplates(id);
         var delta = new Date().getTime() - profile.expire_date;

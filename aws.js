@@ -7,8 +7,7 @@ var nconf = require("./wrio_nconf.js").init();
 var keyid = nconf.get("aws:aws_access_key_id"), secret = nconf.get("aws:aws_secret_access_key");
 AWS.config.update({accessKeyId: keyid, secretAccessKey: secret});
 var s3 = new AWS.S3({
-    params: {Bucket: 'webrunes', Key: 'test'},
-    //endpoint: "http://webrunes.s3-website-us-east-1.amazonaws.com/"
+    params: {Bucket: 'wr.io', Key: 'test'}
 });
 
 var indexTemplate = "index  loading...";
@@ -76,7 +75,7 @@ module.exports.saveFile = function (userID,path,file,done) {
 
     var params = {
         Body:file,
-        Key:userID+'/'+path,
+        Key:userID+path,
         ACL:'public-read',
         ContentType:"text/html"
     };
