@@ -6,9 +6,12 @@
 </head>
 <body>
 
+<div>Testing get_user_profile... <span id="get"></span></div>
+<div>Testing save... <span id="save"></span></div>
+
 <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
 <script type="text/javascript">
-    var url = "/webtest.html";
+    var url = "webtest.html";
     var contents = "<html></html>";
 
     $.ajax({
@@ -17,6 +20,9 @@
         'dataType':'json',
 //            'fileData': imageData,
         data: {}
+    }).success(function (res) {
+        console.log("Get_profile finish");
+        $('#get').html(JSON.stringify(res));
     });
 
     $.ajax({
@@ -28,10 +34,15 @@
                 'url': url,
                 'bodyData': contents
             }
+    }).success(function (res) {
+        console.log("Save finish");
+        $('#save').html(JSON.stringify(res));
     });
 
 
 </script>
+
+
 
 </body>
 </html>
