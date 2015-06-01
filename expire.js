@@ -13,7 +13,7 @@ var nconf = require("./wrio_nconf.js").init();
 var keyid = nconf.get("aws:aws_access_key_id"), secret = nconf.get("aws:aws_secret_access_key");
 AWS.config.update({accessKeyId: keyid, secretAccessKey: secret});
 var s3 = new AWS.S3({
-    params: {Bucket: 'webrunes', Key: 'test'},
+    params: {Bucket: 'wr.io', Key: 'test'},
     //endpoint: "http://webrunes.s3-website-us-east-1.amazonaws.com/"
 });
 
@@ -43,35 +43,12 @@ function handleDisconnect() {
 
                     for (var i in data) {
                         console.log("Deleting ", data[i]);
-
-                        var params = {
-                            Bucket: 'webrunes', /* required */
-                            Key: data[i].id+"/cover.htm" /* required */
-                        }
-
-                        s3.deleteObject(params, function(err, data) {
-                            if (err) {
-                                console.log("Can't delete object",err, err.stack);
-                            } // an error occurred
-                            else     console.log("object deleted");           // successful response
-                        });
-                        var params = {
-                            Bucket: 'webrunes', /* required */
-                            Key: data[i].id+"/index.htm" /* required */
-                        }
-
-                        s3.deleteObject(params, function(err, data) {
-                            if (err) {
-                                console.log("Can't delete object",err, err.stack);
-                            } // an error occurred
-                            else     console.log("object deleted");           // successful response
-                        });
-
+                        deleteFolder(data[i].id);
                     }
 
                     deleteExpiredProfiles(d,function() {
                         if (err) {
-                            console.log("Delte error");
+                            console.log("Delete error");
                             return;
                         }
                         console.log("Delete successful");
@@ -138,6 +115,34 @@ var getExpiredProfiles = function (time,exists) {
     });
 };
 
+function deleteFolder(id) {
+
+    var params = {
+        Bucket: 'wr.io',
+        Prefix: id+'/'
+    };
+
+    s3.listObjects(params, function(err, data) {
+        if (err) return console.log(err);
+
+        params = {Bucket: 'wr.io'};
+        params.Delete = {};
+        params.Delete.Objects = [];
+
+        data.Contents.forEach(function(content) {
+            params.Delete.Objects.push({Key: content.Key});
+        });
+
+        s3.deleteObjects(params, function(err, data) {
+            if (err) return console.log(err);
+
+            return console.log(data.Deleted.length);
+        });
+    });
+
+}
+
+
 
 var deleteExpiredProfiles = function (time,exists) {
     var query = "DELETE FROM `user_profiles` WHERE expire_date < ?";
@@ -151,5 +156,6 @@ var deleteExpiredProfiles = function (time,exists) {
         return;
     });
 };
+
 
 
