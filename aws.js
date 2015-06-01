@@ -12,7 +12,7 @@ var s3 = new AWS.S3({
 
 var indexTemplate = "index  loading...";
 var coverTemplate = "cover loading...";
-
+var plusTemplate = "plus loading...";
 // get templates we will be working on
 
 var params = {
@@ -26,9 +26,20 @@ s3.getObject(params,function(err,res) {
     }
     indexTemplate = res.Body.toString();
 });
-var params = {
+params = {
     Bucket:'wrio',
     Key: "Login-WRIO-App/default/cover.htm"
+};
+s3.getObject(params,function(err,res) {
+    if (err) {
+        console.log("Can't get index template ",err);
+        return;
+    }
+    coverTemplate = res.Body.toString();
+});
+params = {
+    Bucket:'wrio',
+    Key: "Default-WRIO-Theme/widget/defaultList.htm"
 };
 s3.getObject(params,function(err,res) {
     if (err) {
@@ -68,6 +79,20 @@ module.exports.createTemplates = function (userID) {
         console.log(res);
     });
 
+    params = {
+        Body:plusTemplate,
+        Key:userID+"/Plus-WRIO-App/index.htm",
+        ACL:'public-read',
+        ContentType:"text/html"
+    };
+
+    s3.upload(params,function (err,res) {
+        if (err) {
+            console.log(err);
+        }
+        console.log(res);
+    });
+
 
 };
 
@@ -89,9 +114,6 @@ module.exports.saveFile = function (userID,path,file,done) {
         console.log("File uploaded to s3",res);
         done(null,res.Location);
     });
-
-
-
 
 };
 
