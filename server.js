@@ -48,7 +48,7 @@ app.use(session(
         cookie: {
             secure:false,
             domain:DOMAIN,
-            maxAge: 1000 * 60 * 24 * 30
+            maxAge: 1000 * 60 * 60 * 24 * 30
         },
         key: 'sid'
     }
@@ -156,6 +156,7 @@ app.post('/api/get_profile', function (request, response) {
         }
         console.log("Got user profile",id, " creating templates");
         // return profile expire time
+        response.cookie('user_profile', id, { expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), httpOnly: true, domain:DOMAIN });
         aws.createTemplates(id);
         var delta = new Date().getTime() - profile.expire_date;
         var deltadays = Math.round(delta / (24*60*60*1000));
