@@ -7,6 +7,7 @@ exports.init = function (express) {
     app.use(function (request, response, next) {
         var host = request.get('origin');
         console.log(host);
+        if (host == undefined) host = "";
 
         if (host.match(/^localhost:[0-9]+$/m)) {
             response.setHeader('Access-Control-Allow-Origin', host);
