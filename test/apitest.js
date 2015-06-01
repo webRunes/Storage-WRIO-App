@@ -28,6 +28,7 @@ describe("API unit tests", function() {
             .expect('Content-Type', /json/)
             .expect(200)
             .expect('set-cookie', /sid/)
+       //     .expect('set-cookie', /user_profile/)
             .end(function(err, res){
                 if (err) throw err;
                 var resp = res.body;
