@@ -14,7 +14,7 @@ exports.init = function (express) {
             console.log("Allowing CORS for localhost");
         }
 
-        if (host.match(/\.webrunes\.com$/m)) {
+        if (host.match(/\.wrioos\.com$/m)) {
             response.setHeader('Access-Control-Allow-Origin', host);
             console.log("Allowing CORS for webrunes domains");
         }
