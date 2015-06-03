@@ -4,6 +4,6 @@
 (coming soon)
 
 ##Official Hub
-[storage.webrunes.com](http://storage.wrioos.com)
+[storage.wrioos.com](http://storage.wrioos.com)
 
 Powered by [Open Copyright](http://opencopyright.webrunes.com)
