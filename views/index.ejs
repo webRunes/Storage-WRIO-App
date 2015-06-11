@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<script type="text/javascript">
+    var url= "http://<%= url %>";
+    var days = "<%= days %>";
+    var tuple = {
+        days:days,
+        url:url
+    };
+    parent.postMessage(JSON.stringify(tuple), "*");
+</script>
+</body>
+</html>
