@@ -16,7 +16,7 @@ var plusTemplate = "plus loading...";
 // get templates we will be working on
 
 var params = {
-    Bucket:'wrio',
+    Bucket: 'wrioos.com',
     Key: "Login-WRIO-App/default/index.htm"
 };
 s3.getObject(params,function(err,res) {
@@ -27,7 +27,7 @@ s3.getObject(params,function(err,res) {
     indexTemplate = res.Body.toString();
 });
 params = {
-    Bucket:'wrio',
+    Bucket: 'wrioos.com',
     Key: "Login-WRIO-App/default/cover.htm"
 };
 s3.getObject(params,function(err,res) {
@@ -38,7 +38,7 @@ s3.getObject(params,function(err,res) {
     coverTemplate = res.Body.toString();
 });
 params = {
-    Bucket:'wrio',
+    Bucket: 'wrioos.com',
     Key: "Default-WRIO-Theme/widget/defaultList.htm"
 };
 s3.getObject(params,function(err,res) {
@@ -92,7 +92,6 @@ module.exports.createTemplates = function (userID) {
         }
         console.log(res);
     });
-
 
 };
 
