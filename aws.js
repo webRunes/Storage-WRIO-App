@@ -1,7 +1,3 @@
-/**
- * Created by mich.bil on 18.05.15.
- */
-
 var AWS = require('aws-sdk');
 var nconf = require("./wrio_nconf.js").init();
 var keyid = nconf.get("aws:aws_access_key_id"), secret = nconf.get("aws:aws_secret_access_key");
