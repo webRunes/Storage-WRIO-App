@@ -13,7 +13,7 @@ var plusTemplate = "plus loading...";
 
 var params = {
     Bucket: 'wrioos.com',
-    Key: "Login-WRIO-App/default/index.htm"
+    Key: "Storage-WRIO-App/tree/master/default/index.htm"
 };
 s3.getObject(params,function(err,res) {
     if (err) {
@@ -21,10 +21,12 @@ s3.getObject(params,function(err,res) {
         return;
     }
     indexTemplate = res.Body.toString();
+    var domain = nconf.get("db:workdomain").replace(".",'');
+
 });
 params = {
     Bucket: 'wrioos.com',
-    Key: "Login-WRIO-App/default/cover.htm"
+    Key: "Storage-WRIO-App/tree/master/default/cover.htm"
 };
 s3.getObject(params,function(err,res) {
     if (err) {
@@ -48,6 +50,8 @@ s3.getObject(params,function(err,res) {
 
 module.exports.createTemplates = function (userID) {
 
+
+    indexTemplate.replace('{{domain}}','http://'+domain+'/'+userID);
     var params = {
         Body:indexTemplate,
         Key:userID+"/index.htm",
