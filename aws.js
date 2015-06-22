@@ -13,7 +13,7 @@ var plusTemplate = "plus loading...";
 
 var params = {
     Bucket: 'wrioos.com',
-    Key: "Storage-WRIO-App/tree/master/default/index.htm"
+    Key: "Storage-WRIO-App/default/index.htm"
 };
 s3.getObject(params,function(err,res) {
     if (err) {
@@ -26,7 +26,7 @@ s3.getObject(params,function(err,res) {
 });
 params = {
     Bucket: 'wrioos.com',
-    Key: "Storage-WRIO-App/tree/master/default/cover.htm"
+    Key: "Storage-WRIO-App/default/cover.htm"
 };
 s3.getObject(params,function(err,res) {
     if (err) {
