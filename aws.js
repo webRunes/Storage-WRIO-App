@@ -51,9 +51,9 @@ s3.getObject(params,function(err,res) {
 module.exports.createTemplates = function (userID) {
 
 
-    indexTemplate.replace('{{domain}}','http://'+domain+'/'+userID);
+    var readyTemplate = indexTemplate.replace('{{domain}}','http://'+domain+'/'+userID);
     var params = {
-        Body:indexTemplate,
+        Body:readyTemplate,
         Key:userID+"/index.htm",
         ACL:'public-read',
         ContentType:"text/html"
