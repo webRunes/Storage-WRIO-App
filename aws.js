@@ -28,18 +28,19 @@ params = {
 };
 s3.getObject(params,function(err,res) {
     if (err) {
-        console.log("Can't get index template ",err);
+        console.log("Can't get cover template ",err);
         return;
     }
     coverTemplate = res.Body.toString();
 });
 params = {
     Bucket: 'wrioos.com',
-    Key: "Default-WRIO-Theme/widget/defaultList.htm"
+    Key: "Plus-WRIO-App/widget/index.htm"
 };
+
 s3.getObject(params,function(err,res) {
     if (err) {
-        console.log("Can't get index template ",err);
+        console.log("Can't get plus template ",err);
         return;
     }
     coverTemplate = res.Body.toString();
