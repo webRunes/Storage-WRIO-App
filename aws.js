@@ -37,7 +37,7 @@ s3.getObject(params,function(err,res) {
 });
 params = {
     Bucket: 'wrioos.com',
-    Key: "Plus-WRIO-App/widget/index.htm"
+    Key: "Plus-WRIO-App/default/index.htm"
 };
 
 s3.getObject(params,function(err,res) {
