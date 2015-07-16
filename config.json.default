@@ -1,0 +1,18 @@
+{
+  "db": {
+	"host": "YOUR_HOST_IP",
+	"dbname": "YOUR_DB_NAME",
+	"user": "YOUR_DB_USER",
+	"password": "YOUR_DB_PASS",
+	"workdomain": ".wrioos.com"  // replace .wrioos.com domain with your domain
+  },
+  "server": {
+    "cookiesecret":"YOUR_COOKIE_SECRET",
+    "port":5002
+  },
+  "aws": {
+    "aws_access_key_id":"YOUR_AWS_KEY_ID",
+    "aws_secret_access_key":"YOUR_AWS_ACCESS_KEY"
+  }
+
+}
