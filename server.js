@@ -17,9 +17,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 
-
-
-
 MYSQL_HOST = nconf.get("db:host");
 MYSQL_USER = nconf.get("db:user");
 MYSQL_PASSWORD = nconf.get("db:password");
