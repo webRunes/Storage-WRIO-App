@@ -21,7 +21,7 @@ s3.getObject(params,function(err,res) {
         return;
     }
     indexTemplate = res.Body.toString();
-    var domain = nconf.get("db:workdomain").replace(".",'');
+
 
 });
 params = {
@@ -37,7 +37,7 @@ s3.getObject(params,function(err,res) {
 });
 params = {
     Bucket: 'wrioos.com',
-    Key: "Plus-WRIO-App/widget/index.htm"
+    Key: "Plus-WRIO-App/default/index.htm"
 };
 
 s3.getObject(params,function(err,res) {
@@ -50,8 +50,9 @@ s3.getObject(params,function(err,res) {
 
 module.exports.createTemplates = function (userID) {
 
-
+    var domain = nconf.get("db:workdomain").replace(".",'');
     var userTemplate = indexTemplate.replace('{{domain}}','http://'+domain+'/'+userID);
+    console.log("UT:",userTemplate);
     var params = {
         Body:userTemplate,
         Key:userID+"/index.htm",
