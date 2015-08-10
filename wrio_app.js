@@ -1,4 +1,5 @@
 var exports = module.exports = {};
+var nconf = require("./wrio_nconf.js").init();
 
 exports.init = function (express) {
     var app = express();
@@ -6,17 +7,24 @@ exports.init = function (express) {
     // Add headers
     app.use(function (request, response, next) {
         var host = request.get('origin');
-        console.log(host);
         if (host == undefined) host = "";
+        console.log(host);
+
+        domain = nconf.get("db:workdomain");
 
         if (host.match(/^localhost:[0-9]+$/m)) {
             response.setHeader('Access-Control-Allow-Origin', host);
             console.log("Allowing CORS for localhost");
         }
 
-        if (host.match(/\.wrioos\.com$/m)) {
+        domain = domain.replace(/\./g,'\\.')+'$';
+        console.log(domain);
+
+        if (host.match(new RegExp(domain,'m'))) {
             response.setHeader('Access-Control-Allow-Origin', host);
             console.log("Allowing CORS for webrunes domains");
+        } else {
+            console.log('host not match');
         }
 
         response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
