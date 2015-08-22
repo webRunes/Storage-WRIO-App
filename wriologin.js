@@ -70,7 +70,7 @@ function loginWithSessionId(ssid,done) {
     q = "select * from sessions where session_id =\""+ssid+"\"";
     connection.query(q,function(err,rows){
         if (err) {
-            console.log("Error searchin session, ",err);
+            console.log("Error searching session, ",err);
             done(err);
             return;
         }
