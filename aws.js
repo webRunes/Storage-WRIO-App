@@ -52,7 +52,7 @@ module.exports.createTemplates = function (userID) {
 
     var domain = nconf.get("db:workdomain").replace(".",'');
     var userTemplate = indexTemplate.replace('{{domain}}','http://'+domain+'/'+userID);
-    console.log("UT:",userTemplate);
+    //console.log("UT:",userTemplate);
     var params = {
         Body:userTemplate,
         Key:userID+"/index.htm",

@@ -46,7 +46,7 @@ module.exports = function (db) {
                     expire_date: new Date().getTime(),
                     "session": session
                 };
-                user_profiles.insertOne(profile, function (err, rows) {
+                user_profiles.insertOne(profile, function (err) {
 
                     if (err || !profile) {
                         console.log("Create temporary profile error", err);
@@ -76,14 +76,14 @@ module.exports = function (db) {
     function saveWRIOid(userID, wrioID, done) {
         console.log("Saving wrioID for user ", userID);
 
-        webrunesUsers.updateOne(ObjectID(userID),{wrioID:wrioID}, function(err,profile) {
+        webrunesUsers.updateOne({_id:userID},{$set: {wrioID:wrioID}}, function(err,result) {
             if (err) {
                 console.log("Update error", err);
-                done("Can't insert");
+                done("Can't update");
                 return;
             }
 
-            console.log("Update query done " + profile);
+            console.log("Update query done " + result);
             deleteTempProfile(wrioID);
             return done(null);
         });
