@@ -124,7 +124,7 @@ module.exports = function (app,db,aws) {
         }
 
         wrioLogin.loginWithSessionId(request.sessionID, function gotSessionId(err, result) {
-            if (err) {
+            if (err || !result) {
                 console.log("User not logged in");
                 getTempProfile();
                 return;
