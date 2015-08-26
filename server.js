@@ -12,6 +12,9 @@ var bodyParser = require('body-parser');
 var MongoClient = require('mongodb')
     .MongoClient;
 app.custom = {};
+
+app.ready = function () {};
+
 var server = require('http')
     .createServer(app)
     .listen(nconf.get("server:port"), function(req, res) {
@@ -24,6 +27,7 @@ var server = require('http')
                 app.custom.db = db;
                 console.log("Connected correctly to mongodb server");
                 server_setup(db);
+                app.ready();
             }
         });
     });

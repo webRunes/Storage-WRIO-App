@@ -13,9 +13,21 @@ process.stdout._write = stdout_write;
 process.stderr._write = stderr_write;
 
 
+var ready = false;
+app.ready = function() {
+    ready = true;
+};
+
 describe("API unit tests", function() {
-    before(function(done) {
-        setTimeout(done,2000);
+    before(function (done) {
+        setInterval(function() {
+            if (ready) {
+                console.log("App ready, starting tests");
+                done();
+                clearInterval(this);
+            }
+
+        }, 1000);
     });
     it("should successfully upload file to storage",function(done) {
         postdata = {
