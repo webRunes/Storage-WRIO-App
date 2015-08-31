@@ -24,7 +24,7 @@ module.exports = function (db) {
                 exists(false);
                 return;
             }
-            console.log(profile);
+            console.log("Found corresponding profile for the session"+session+":",profile);
             exists(true, profile);
 
             return;
@@ -103,7 +103,7 @@ module.exports = function (db) {
                     done(null, id, profile);
                 });
             } else {
-                done(null, user_profile.id, user_profile);
+                done(null, user_profile._id, user_profile);
             }
         });
     }
