@@ -64,7 +64,6 @@ module.exports.createTemplates = function (userID) {
         if (err) {
             console.log(err);
         }
-        console.log(res);
     });
 
     params = {
@@ -78,7 +77,6 @@ module.exports.createTemplates = function (userID) {
         if (err) {
             console.log(err);
         }
-        console.log(res);
     });
 
     params = {
@@ -92,7 +90,6 @@ module.exports.createTemplates = function (userID) {
         if (err) {
             console.log(err);
         }
-        console.log(res);
     });
 
 };

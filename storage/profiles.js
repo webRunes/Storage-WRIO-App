@@ -3,6 +3,7 @@ module.exports = function (db) {
     var user_profiles = db.collection('user_profiles');
     var webrunesUsers = db.collection('webRunes_Users');
     var ObjectID = require('mongodb').ObjectID;
+    var Promise =  require('es6-promise').Promise;
 
     var checkIdExists = function (wrioID, exists) {
         user_profiles.findOne({"_id": wrioID}, function (err, profile) {
@@ -24,7 +25,7 @@ module.exports = function (db) {
                 exists(false);
                 return;
             }
-            console.log("Found corresponding profile for the session"+session+":",profile);
+            console.log("Found corresponding profile for the session "+session+" : ",profile);
             exists(true, profile);
 
             return;
