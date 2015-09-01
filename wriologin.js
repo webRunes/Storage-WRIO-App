@@ -6,6 +6,7 @@ var ObjectID = require('mongodb').ObjectID;
 var nconf = require("./wrio_nconf.js")
     .init();
 
+var Promise =  require('es6-promise').Promise;
 var EXPIRY_TIME = 30*24*60*60*1000; // account expiry time
 
 var $ = function (db) {
@@ -78,17 +79,25 @@ var $ = function (db) {
         });
     }
 
+    function getLoggedInUser(ssid) {
+        return new Promise(function (resolve, reject) {
+            loginWithSessionId(ssid, function (err, res) {
+                if (err) {
+                    return reject(err);
+                }
 
-
-
+                resolve(res);
+            });
+        });
+    }
 
     return {
         loginWithSessionId: loginWithSessionId,
-        getTwitterCredentials: getTwitterCredentials
-
-
-
+        getTwitterCredentials: getTwitterCredentials,
+        getLoggedInUser: getLoggedInUser
     }
+
+
 
 };
 

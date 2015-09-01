@@ -2,7 +2,8 @@ var express = require('express');
 var app = require("./wrio_app.js").init(express);
 var nconf = require("./wrio_nconf.js").init();
 var DOMAIN= nconf.get("db:workdomain");
-var aws = require("./aws.js")
+var aws = require("./aws.js");
+
 
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
@@ -13,24 +14,28 @@ var MongoClient = require('mongodb')
     .MongoClient;
 app.custom = {};
 
-app.ready = function () {};
+var db = require("./utils/db.js");
+var mongoUrl = 'mongodb://' + nconf.get('mongo:user') + ':' + nconf.get('mongo:password') + '@' + nconf.get('mongo:host') + '/' + nconf.get('mongo:dbname');
+app.ready = function() {};
 
-var server = require('http')
-    .createServer(app)
-    .listen(nconf.get("server:port"), function(req, res) {
-        console.log('app listening on port ' + nconf.get('server:port') + '...');
-        var url = 'mongodb://' + nconf.get('mongo:user') + ':' + nconf.get('mongo:password') + '@' + nconf.get('mongo:host') + '/' + nconf.get('mongo:dbname');
-        MongoClient.connect(url, function(err, db) {
-            if (err) {
-                console.log("Error conecting to mongo database: " + err);
-            } else {
+db.mongo({
+    url: mongoUrl
+})
+    .then(function(res) {
+        console.log("Connected correctly to database");
+        var db = res.db || {};
+        var server = require('http')
+            .createServer(app)
+            .listen(nconf.get("server:port"), function(req, res) {
                 app.custom.db = db;
-                console.log("Connected correctly to mongodb server");
                 server_setup(db);
                 app.ready();
-            }
-        });
+            });
+    })
+    .catch(function(err) {
+        console.log('Error connect to database:' + err.code + ': ' + err.message);
     });
+
 
 function server_setup(db) {
 

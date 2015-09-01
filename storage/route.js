@@ -122,48 +122,51 @@ module.exports = function (app,db,aws) {
 
             });
         }
+        function saveTempProfile() {
+            // try to find wrioID profile from session or from cookie
+            console.log("wrcd ioID not found for this profile, making temporary profile persistent....");
 
-        wrioLogin.loginWithSessionId(request.sessionID, function gotSessionId(err, result) {
-            if (err || !result) {
-                console.log("User not logged in");
-                getTempProfile();
-                return;
+            if (request.cookies.user_profile) {
+                console.log("Got user_profile cookie");
+                profiles.saveWRIOid(result.userID, request.cookies.user_profile, function (err) {
+                    if (err) {
+                        console.log("Failed to save WRIOid");
+                        throw "Can't save wrio ID";
+                        return;
+                    }
+                    response.send(returnPersistentProfile(json_resp, result.userID, name));
+
+
+                })
+            } else {
+                profiles.getUserProfile(request.sessionID, function (err, id, profile) {
+                    if (err) {
+                        throw "Cant get user profile";
+                        return;
+                    }
+                    profiles.saveWRIOid(result.userID, id, function (err) {
+                        response.send(returnPersistentProfile(json_resp, id, name));
+                    });
+                });
             }
+
+
+        }
+
+        wrioLogin.
+        getLoggedInUser(request.sessionID).
+        then(function gotSessionId(result) {
             if (result.wrioID) {
-
                 var name = result.lastName;
-
                 console.log("User found with wrioID=", result.wrioID);
                 response.send(returnPersistentProfile(json_resp, result.wrioID, name));
             } else {
-                // try to find wrioID profile from session or from cookie
-                console.log("wrioID not found for this profile");
-
-                if (request.cookies.user_profile) {
-                    console.log("Got user_profile cookie");
-                    profiles.saveWRIOid(result.userID, request.cookies.user_profile, function (err) {
-                        if (err) {
-                            console.log("Failed to save WRIOid");
-                            getTempProfile();
-                            return;
-                        }
-                        response.send(returnPersistentProfile(json_resp, result.userID, name));
-
-
-                    })
-                } else {
-                    profiles.getUserProfile(request.sessionID, function (err, id, profile) {
-                        if (err) {
-                            getTempProfile();
-                            return;
-                        }
-                        profiles.saveWRIOid(result.userID, id, function (err) {
-                            response.send(returnPersistentProfile(json_resp, id, name));
-                        });
-                    });
-                }
-
+                saveTempProfile();
             }
+        }).
+        catch(function (err) {
+            console.log("User not logged in");
+            getTempProfile();
         });
 
 
@@ -176,4 +179,6 @@ module.exports = function (app,db,aws) {
         response.redirect('/');
 
     });
-}
+};
+
+
