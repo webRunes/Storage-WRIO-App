@@ -8,7 +8,6 @@ var AWS = require('../aws.js');
 
 var mongoUrl = 'mongodb://' + nconf.get('mongo:user') + ':' + nconf.get('mongo:password') + '@' + nconf.get('mongo:host') + '/' + nconf.get('mongo:dbname');
 require('./db.js').mongo( {url: mongoUrl}).then(function(db) {
-
     console.log("Updating profiles");
     fix_profiles(db.db);
 }).catch(function (err) {
