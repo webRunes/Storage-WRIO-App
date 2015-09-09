@@ -1,10 +1,6 @@
-
 var nconf = require("./wrio_nconf.js").init();
-
 DOMAIN= nconf.get("db:workdomain");
-
 var AWS = require('aws-sdk');
-var nconf = require("./wrio_nconf.js").init();
 var keyid = nconf.get("aws:aws_access_key_id"), secret = nconf.get("aws:aws_secret_access_key");
 AWS.config.update({accessKeyId: keyid, secretAccessKey: secret});
 var s3 = new AWS.S3({
@@ -13,17 +9,12 @@ var s3 = new AWS.S3({
 });
 
 
-var MongoClient = require('mongodb')
-    .MongoClient;
-
-var url = 'mongodb://' + nconf.get('mongo:user') + ':' + nconf.get('mongo:password') + '@' + nconf.get('mongo:host') + '/' + nconf.get('mongo:dbname');
-MongoClient.connect(url, function(err, db) {
-    if (err) {
-        console.log("Error conecting to mongo database: " + err);
-    } else {
-        console.log("Connected correctly to mongodb server");
-        expire(db);
-    }
+var mongoUrl = 'mongodb://' + nconf.get('mongo:user') + ':' + nconf.get('mongo:password') + '@' + nconf.get('mongo:host') + '/' + nconf.get('mongo:dbname');
+require('./utils/db.js').mongo( {url: mongoUrl}).then(function(db) {
+    console.log("Updating profiles");
+    expire(db.db);
+}).catch(function (err) {
+    console.log(err);
 });
 
 
