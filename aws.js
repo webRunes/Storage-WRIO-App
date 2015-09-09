@@ -11,42 +11,40 @@ var coverTemplate = "cover loading...";
 var plusTemplate = "plus loading...";
 // get templates we will be working on
 
-var params = {
-    Bucket: 'wrioos.com',
-    Key: "Storage-WRIO-App/default/index.htm"
-};
-s3.getObject(params,function(err,res) {
+
+function download(url,callback) {
+    var params = {
+        Bucket: 'wrioos.com',
+        Key: url
+    };
+    s3.getObject(params,callback);
+}
+
+
+download("Storage-WRIO-App/default/index.htm",function(err,res) {
     if (err) {
         console.log("Can't get index template ",err);
         return;
     }
     indexTemplate = res.Body.toString();
-
-
 });
-params = {
-    Bucket: 'wrioos.com',
-    Key: "Storage-WRIO-App/default/cover.htm"
-};
-s3.getObject(params,function(err,res) {
+download("Plus-WRIO-App/default/index.htm",function(err,res) {
+    if (err) {
+        console.log("Can't get index template ",err);
+        return;
+    }
+    plusTemplate = res.Body.toString();
+    console.log("Plus template loaded");
+});
+
+download("Storage-WRIO-App/default/cover.htm",function(err,res) {
     if (err) {
         console.log("Can't get cover template ",err);
         return;
     }
     coverTemplate = res.Body.toString();
 });
-params = {
-    Bucket: 'wrioos.com',
-    Key: "Plus-WRIO-App/default/index.htm"
-};
 
-s3.getObject(params,function(err,res) {
-    if (err) {
-        console.log("Can't get plus template ",err);
-        return;
-    }
-    coverTemplate = res.Body.toString();
-});
 
 module.exports.createTemplates = function (userID) {
 
