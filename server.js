@@ -29,7 +29,7 @@ db.mongo({
             .listen(nconf.get("server:port"), function(req, res) {
                 app.custom.db = db;
                 server_setup(db);
-                app.ready();
+                app.ready(db);
             });
     })
     .catch(function(err) {
