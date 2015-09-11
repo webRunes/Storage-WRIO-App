@@ -124,7 +124,7 @@ module.exports = function (app,db,aws) {
         }
         function saveTempProfile() {
             // try to find wrioID profile from session or from cookie
-            console.log("wrcd ioID not found for this profile, making temporary profile persistent....");
+            console.log("wrioID not found for this profile, making temporary profile persistent....");
 
             if (request.cookies.user_profile) {
                 console.log("Got user_profile cookie");
