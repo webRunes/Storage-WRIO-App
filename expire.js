@@ -24,23 +24,23 @@ function expire(db) {
     var user_profiles = db.collection('user_profiles');
 
     var profileTime = function (time, exists) {
-        user_profiles.find({}).sort({expire_date:-1}).toArray(function(err,records) {
+        user_profiles.find({}).sort({expire_date:-1}).toArray(function(err,rows) {
             if (err) {
                 console.log("Expire error", err);
-                exists(null);
                 return;
             }
-            if (!records) {
+            if (!rows) {
                 console.log("No records found");
-                exists(null);
             }
             //  console.log(rows);
             for (var i in rows) {
                 var row = rows[i];
-                console.log(Math.round(( new Date().getTime() - row.expire_date) / (1000 * 60 * 60)) + " hours");
+                console.log(Math.round(( new Date().getTime() - row.expire_date) / (1000 * 60 * 60*24)) + " days");
             }
         });
     };
+
+    profileTime(0);
 
     var getExpiredProfiles = function (time, exists) {
         user_profiles.find({expire_date: {
@@ -129,7 +129,7 @@ function expire(db) {
         } else {
             console.log("No expired")
         }
-        db.close();
+       // db.close();
 
     });
 };
