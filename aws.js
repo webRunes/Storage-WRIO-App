@@ -28,14 +28,14 @@ download("Storage-WRIO-App/default/index.htm",function(err,res) {
     }
     indexTemplate = res.Body.toString();
 });
-download("Plus-WRIO-App/default/index.htm",function(err,res) {
-    if (err) {
-        console.log("Can't get index template ",err);
-        return;
-    }
-    plusTemplate = res.Body.toString();
-    console.log("Plus template loaded");
-});
+//download("Plus-WRIO-App/default/index.htm",function(err,res) {
+//    if (err) {
+//        console.log("Can't get index template ",err);
+//        return;
+//    }
+//    plusTemplate = res.Body.toString();
+//    console.log("Plus template loaded");
+//});
 
 download("Storage-WRIO-App/default/cover.htm",function(err,res) {
     if (err) {
