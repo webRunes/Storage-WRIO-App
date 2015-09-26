@@ -12,6 +12,9 @@ var stdout_write = process.stdout._write,
 process.stdout._write = stdout_write;
 process.stderr._write = stderr_write;
 
+var Session = require('supertest-session')({
+    app: require('../server.js')
+});
 
 var ready = false;
 app.ready = function() {

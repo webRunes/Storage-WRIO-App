@@ -36,7 +36,8 @@
   "devDependencies": {
     "mocha": "^2.2.5",
     "should": "^6.0.3",
-    "supertest": "^1.0.1"
+    "supertest": "^1.0.1",
+    "supertest-session": "^1.0.0"
   },
   "scripts": {
     "start": "echo \"Build Completed.\" "

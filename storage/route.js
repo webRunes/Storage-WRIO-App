@@ -122,46 +122,52 @@ module.exports = function (app,db,aws) {
 
             });
         }
-        function saveTempProfile() {
+        function saveTempProfile(user) {
             // try to find wrioID profile from session or from cookie
-            console.log("wrcd ioID not found for this profile, making temporary profile persistent....");
+            console.log("wrioID not found for this profile, making temporary profile persistent....");
+            console.log(request.cookies);
 
-            if (request.cookies.user_profile) {
+/*            if (request.cookies.user_profile) {
                 console.log("Got user_profile cookie");
-                profiles.saveWRIOid(result.userID, request.cookies.user_profile, function (err) {
+                profiles.saveWRIOid(user.userID, request.cookies.user_profile, function (err) {
                     if (err) {
                         console.log("Failed to save WRIOid");
                         throw "Can't save wrio ID";
                         return;
                     }
-                    response.send(returnPersistentProfile(json_resp, result.userID, name));
+                    response.send(returnPersistentProfile(json_resp, user.userID, name));
 
 
                 })
-            } else {
+            } else {*/
                 profiles.getUserProfile(request.sessionID, function (err, id, profile) {
                     if (err) {
                         throw "Cant get user profile";
                         return;
                     }
-                    profiles.saveWRIOid(result.userID, id, function (err) {
-                        response.send(returnPersistentProfile(json_resp, id, name));
+                    console.log("Got user_profile",profile);
+                    var wrioid = profile._id;
+                    profiles.saveWRIOid(user._id, wrioid.toString(), function (err) {
+                        response.send(returnPersistentProfile(json_resp, id, user.lastName));
                     });
                 });
-            }
+            /*}*/
 
 
         }
 
         wrioLogin.
         getLoggedInUser(request.sessionID).
-        then(function gotSessionId(result) {
-            if (result.wrioID) {
-                var name = result.lastName;
-                console.log("User found with wrioID=", result.wrioID);
-                response.send(returnPersistentProfile(json_resp, result.wrioID, name));
+        then(function (user) {
+            if (!user) {
+                throw new Error("Got no user");
+            }
+            if (user.wrioID) {
+                var name = user.lastName;
+                console.log("User found with wrioID=", user.wrioID);
+                response.send(returnPersistentProfile(json_resp, user.wrioID, name));
             } else {
-                saveTempProfile();
+                saveTempProfile(user);
             }
         }).
         catch(function (err) {
