@@ -73,6 +73,7 @@ module.exports = function (db) {
         });
 
     }
+    /* Saves wrioID for user id */
 
     function saveWRIOid(userID, wrioID, done) {
         console.log("Saving wrioID for user ", userID);
