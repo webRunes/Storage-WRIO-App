@@ -6,7 +6,6 @@ var nconf = require("./wrio_nconf.js")
 var DOMAIN = nconf.get("db:workdomain");
 var aws = require("./aws.js");
 
-
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
