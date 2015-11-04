@@ -1,7 +1,9 @@
 var express = require('express');
-var app = require("./wrio_app.js").init(express);
-var nconf = require("./wrio_nconf.js").init();
-var DOMAIN= nconf.get("db:workdomain");
+var app = require("./wrio_app.js")
+    .init(express);
+var nconf = require("./wrio_nconf.js")
+    .init();
+var DOMAIN = nconf.get("db:workdomain");
 var aws = require("./aws.js");
 
 
@@ -19,8 +21,8 @@ var mongoUrl = 'mongodb://' + nconf.get('mongo:user') + ':' + nconf.get('mongo:p
 app.ready = function() {};
 
 db.mongo({
-    url: mongoUrl
-})
+        url: mongoUrl
+    })
     .then(function(res) {
         console.log("Connected correctly to database");
         var db = res.db || {};
@@ -44,25 +46,32 @@ function server_setup(db) {
 
     var SessionStore = require('connect-mongo')(session);
     var cookie_secret = nconf.get("server:cookiesecret");
-    var sessionStore = new SessionStore({db: app.custom.db});
+    var sessionStore = new SessionStore({
+        db: app.custom.db
+    });
     app.use(cookieParser(cookie_secret));
-    app.use(session(
-        {
+    app.use(session({
 
-            secret: cookie_secret,
-            saveUninitialized: true,
-            store: sessionStore,
-            resave: true,
-            cookie: {
-                secure: false,
-                domain: DOMAIN,
-                maxAge: 1000 * 60 * 60 * 24 * 30
-            },
-            key: 'sid'
-        }
-    ));
+        secret: cookie_secret,
+        saveUninitialized: true,
+        store: sessionStore,
+        resave: true,
+        cookie: {
+            secure: false,
+            domain: DOMAIN,
+            maxAge: 1000 * 60 * 60 * 24 * 30
+        },
+        key: 'sid'
+    }));
 
     app.use(bodyParser.urlencoded());
+
+    app.get('/', function(request, response) {
+
+        response.sendFile(__dirname +
+            '/hub/index.htm');
+
+    });
 
     require('./storage/route')(app, db, aws);
 }
