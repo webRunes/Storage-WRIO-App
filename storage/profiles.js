@@ -117,4 +117,4 @@ module.exports = function (db) {
         saveWRIOid: saveWRIOid,
         getUserProfile: getUserProfile
     }
-}
+};
