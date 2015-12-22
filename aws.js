@@ -114,3 +114,29 @@ module.exports.saveFile = function (userID,path,file,done) {
     });
 
 };
+module.exports.deleteFolder = function (id) {
+
+    var params = {
+        Bucket: 'wr.io',
+        Prefix: id + '/'
+    };
+
+    s3.listObjects(params, function (err, data) {
+        if (err) return console.log(err);
+
+        params = {Bucket: 'wr.io'};
+        params.Delete = {};
+        params.Delete.Objects = [];
+
+        data.Contents.forEach(function (content) {
+            params.Delete.Objects.push({Key: content.Key});
+        });
+
+        s3.deleteObjects(params, function (err, data) {
+            if (err) return console.log(err);
+
+            return console.log(data.Deleted.length);
+        });
+    });
+
+}
