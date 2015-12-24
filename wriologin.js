@@ -22,7 +22,6 @@ var $ = function (db) {
                 done(err);
                 return;
             }
-
             done(err, user);
         });
     };
