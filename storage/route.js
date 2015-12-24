@@ -5,23 +5,6 @@ module.exports = function(app, db, aws) {
 
 
     var wrioLogin = require('../wriologin.js')(db);
-    var profiles = require('./profiles.js')(db, aws);
-
-    function returndays(j, days, id) {
-        j['url'] = "http://wr.io/" + id + '/';
-        j['cover'] = j['url'] + 'cover.htm';
-        j['days'] = 30 - days;
-        return j;
-    }
-
-    function returnPersistentProfile(j, id, name) {
-        j['temporary'] = false;
-        j['id'] = id;
-        j['url'] = "http://wr.io/" + id + '/';
-        j['cover'] = j['url'] + 'cover.htm';
-        j['name'] = name;
-        return j;
-    }
 
     // *******
     // http://storage.webrunes.com/api/save
@@ -31,12 +14,6 @@ module.exports = function(app, db, aws) {
     // bodyData : target body
 
     // POST REQUEST
-
-    app.get("/api/test", function(request, response) {
-
-        response.render('api_test.ejs', {});
-
-    });
 
     app.post('/api/save', function(request, response) {
         console.log("Save API called");
@@ -83,107 +60,39 @@ module.exports = function(app, db, aws) {
 
     });
 
-
-
-
-    app.post('/api/get_profile', function(request, response) {
-
-        console.log(request.sessionID);
-        var json_resp = {
-            "result": "success"
-        };
-        response.set('Content-Type', 'application/json');
-
-        function getTempProfile() { // get temporary user profile
-            profiles.getUserProfile(request.sessionID, function(err, id, profile) {
-                if (err) {
-                    response.send({
-                        "error": "Can't get user profile"
-                    });
-                    return;
-                }
-                console.log("Got user profile", id, " creating templates");
-                // return profile expire time
-                response.cookie('user_profile', id, {
-                    expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
-                    httpOnly: true,
-                    domain: DOMAIN
-                });
-                aws.createTemplates(id);
-                var delta = new Date()
-                    .getTime() - profile.expire_date;
-                var deltadays = Math.round(delta / (24 * 60 * 60 * 1000));
-                if (deltadays > 30) {
-                    console.log("Profile expired");
-                    profiles.deleteTempProfile(id);
-                    getTempProfile();
-                    return;
-                }
-                console.log("Session exists", delta, deltadays);
-                json_resp['temporary'] = true;
-                json_resp['id'] = id;
-                returndays(json_resp, deltadays, id);
-                response.send(json_resp);
-
-            });
-        }
-
-        function saveTempProfile(user) {
-            // try to find wrioID profile from session or from cookie
-            console.log("wrioID not found for this profile, making temporary profile persistent....");
-            console.log(request.cookies);
-
-            /*            if (request.cookies.user_profile) {
-                            console.log("Got user_profile cookie");
-                            profiles.saveWRIOid(user.userID, request.cookies.user_profile, function (err) {
-                                if (err) {
-                                    console.log("Failed to save WRIOid");
-                                    throw "Can't save wrio ID";
-                                    return;
-                                }
-                                response.send(returnPersistentProfile(json_resp, user.userID, name));
-
-
-                            })
-                        } else {*/
-            profiles.getUserProfile(request.sessionID, function(err, id, profile) {
-                if (err) {
-                    throw "Cant get user profile";
-                    return;
-                }
-                console.log("Got user_profile", profile);
-                var wrioid = profile._id;
-                profiles.saveWRIOid(user._id, wrioid.toString(), function(err) {
-                    response.send(returnPersistentProfile(json_resp, id, user.lastName));
-                });
-            });
-            /*}*/
-
-
-        }
-
-        wrioLogin.
-        getLoggedInUser(request.sessionID)
-            .
-        then(function(user) {
+    app.get('/api/save_templates',function(request,response) {
+        var sid = request.query.sid || '';
+        wrioLogin.getLoggedInUser(sid).
+            then(function(user) {
                 if (!user) {
                     throw new Error("Got no user");
                 }
                 if (user.wrioID) {
-                    var name = user.lastName;
-                    console.log("User found with wrioID=", user.wrioID);
-                    response.send(returnPersistentProfile(json_resp, user.wrioID, name));
-                } else {
-                    saveTempProfile(user);
+                    console.log("Creating S3 templates for ",user.wrioID);
+                    aws.createTemplates(user.wrioID);
                 }
-            })
-            .
-        catch(function(err) {
-            console.log("User not logged in");
-            getTempProfile();
-        });
+                response.send('OK');
+            }).
+            catch(function(err) {
+                console.log("User not logged in");
+                response.status(403).send('Failure')
+            });
+    });
 
-
+    app.get('/api/delete_templates',function(request,response) {
+        var sid = request.query.sid || '';
+        wrioLogin.getLoggedInUser(request.sessionID).
+            then(function(user) {
+                if (!user) {
+                    throw new Error("Got no user");
+                }
+                aws.deleteFolder(user.wrioID);
+                response.send('OK');
+            }).
+            catch(function(err) {
+                console.log("User not logged in");
+                response.status(403).send('Failure')
+            });
     });
 
 
