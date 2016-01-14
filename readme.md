@@ -6,4 +6,4 @@
 ##Official Hub
 [storage.wrioos.com](https://storage.wrioos.com)
 
-Powered by [Open Copyright](https://opencopyright.webrunes.com)
+Powered by [Open Copyright](https://opencopyright.wrioos.com)
