@@ -1,9 +1,9 @@
 [![Build Status](https://travis-ci.org/webRunes/Storage-WRIO-App.svg?branch=master)](https://travis-ci.org/webRunes/Storage-WRIO-App)
 
-#Storage <sup>[WRIO](http://wrioos.com) App</sup>
+#Storage <sup>[WRIO](https://wrioos.com) App</sup>
 (coming soon)
 
 ##Official Hub
-[storage.wrioos.com](http://storage.wrioos.com)
+[storage.wrioos.com](https://storage.wrioos.com)
 
-Powered by [Open Copyright](http://opencopyright.webrunes.com)
+Powered by [Open Copyright](https://opencopyright.webrunes.com)
