@@ -52,7 +52,7 @@ module.exports = function(app, db, aws) {
                 }
                 response.send({
                     "result": "success",
-                    "url": res.replace('https://s3.amazonaws.com/wr.io/', 'http://wr.io/') // remove this when switch to https
+                    "url": res.replace('https://s3.amazonaws.com/wr.io/', 'https://wr.io/')
                 });
             });
 
