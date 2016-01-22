@@ -49,7 +49,7 @@ download("Storage-WRIO-App/default/cover.htm",function(err,res) {
 module.exports.createTemplates = function (userID) {
 
     var domain = nconf.get("db:workdomain").replace(".",'');
-    var userTemplate = indexTemplate.replace(/\{\{domain}}/g,'http://wr.io/'+userID)
+    var userTemplate = indexTemplate.replace(/\{\{domain}}/g,'https://wr.io/'+userID)
         .replace(/\{\{ wrio_id }}/g,userID);
 
     //console.log("UT:",userTemplate);
