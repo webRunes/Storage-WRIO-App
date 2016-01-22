@@ -37,10 +37,14 @@
     "mocha": "^2.2.5",
     "should": "^6.0.3",
     "supertest": "^1.0.1",
-    "supertest-session": "^1.0.0"
+    "supertest-session": "^1.0.0",
+    "gulp": "^3.9.0",
+    "gulp-mocha": "^2.2.0",
+    "gulp-nodemon": "^2.0.4"
   },
   "scripts": {
-    "start": "echo \"Build Completed.\" "
+    "start": "echo \"Build Completed.\" ",
+    "test": "gulp test"
   },
   "repository": {
     "type": "git",

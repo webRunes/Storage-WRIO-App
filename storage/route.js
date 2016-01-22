@@ -41,7 +41,7 @@ module.exports = function(app, db, aws) {
             return;
         }
 
-        profiles.getUserProfile(request.sessionID, function(err, id) {
+        wrioLogin.loginWithSessionId(request.sessionID, function(err, id) {
             console.log("Got user profile", id);
             aws.saveFile(id, url, bodyData, function(err, res) {
                 if (err) {
