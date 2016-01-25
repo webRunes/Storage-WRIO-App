@@ -35,7 +35,7 @@ db.mongo({
             });
     })
     .catch(function(err) {
-        console.log('Error connect to database:' + err.code + ': ' + err.message);
+        console.log('Error connecting to database:' + err.code + ': ' + err.message);
     });
 
 
