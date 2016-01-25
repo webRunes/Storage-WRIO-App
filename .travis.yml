@@ -18,6 +18,8 @@ deploy:
     secret_access_key:
       secure: YHxhDWtmblCtD5aqe67Z1/YhgpGqok0k3eN0pHNrmEJx1s0eUgQk9F7m3kGVgbk8JfzxrQ6EKlWapihJ3bg/vf9VjaN/NSgZqbO9QeIr95wC6YTlAfX65KPr3V7UnHtEYl0EgcKU2sfgoZvWcn999adWmFaITi1dcGzQLBCLb9k=
     app-id: 6e01127a-61aa-450f-b054-1fa116003147
+    on:
+      branch: production
   - provider: s3
     access_key_id:
       secure: FUPq2g9wtMRiOFlNYWtVmU1fzKPu4OSXGtlynkmuWgMMQ0U7HnBquE/lKQPElCqrpFs5kW2zdqEqyKZNgUZPLVTENT5RDTHKCSDC90vG94n6Q+EtpX6WJbugoN7rGeJFUO72iuWX0R5o2QY97VjXsgY6ntpp8mH+EcEpet3W5sg=
@@ -26,3 +28,5 @@ deploy:
     bucket: wrioos.com
     upload-dir: Storage-WRIO-App
     acl: public_read
+    on:
+      branch: production
