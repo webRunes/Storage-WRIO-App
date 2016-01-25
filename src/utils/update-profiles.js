@@ -28,11 +28,11 @@ function fix_profiles(db) {
         if (!records) {
             console.log("No records found");
         }
-;
+
         records.forEach(function(el) {
             console.log(el._id);
             AWS.createTemplates(el._id);
-        })
+        });
 
     });
 

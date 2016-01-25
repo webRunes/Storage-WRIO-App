@@ -40,10 +40,15 @@
     "supertest-session": "^1.0.0",
     "gulp": "^3.9.0",
     "gulp-mocha": "^2.2.0",
-    "gulp-nodemon": "^2.0.4"
+    "gulp-nodemon": "^2.0.4",
+    "eslint": "^1.4.3",
+    "gulp-eslint": "*",
+    "babel-eslint": "*",
+    "eslint-plugin-ideal": "^0.1.2",
+    "eslint-plugin-react": "^3.1.0"
   },
   "scripts": {
-    "start": "echo \"Build Completed.\" ",
+    "start": "gulp lint && echo \"Build Completed.\" ",
     "test": "gulp test"
   },
   "repository": {

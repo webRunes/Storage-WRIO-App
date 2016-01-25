@@ -1,10 +1,10 @@
 module.exports = function(app, db, aws) {
-    var nconf = require("../wrio_nconf.js")
+    var nconf = require("./wrio_nconf.js")
         .init();
     var DOMAIN = nconf.get("db:workdomain");
 
 
-    var wrioLogin = require('../wriologin.js')(db);
+    var wrioLogin = require('./wriologin.js')(db);
 
     // *******
     // http://storage.webrunes.com/api/save
@@ -29,7 +29,7 @@ module.exports = function(app, db, aws) {
             response.send({
                 "error": 'Wrong parameters'
             });
-            return
+            return;
         }
 
         if (!request.sessionID) {
@@ -75,7 +75,7 @@ module.exports = function(app, db, aws) {
             }).
             catch(function(err) {
                 console.log("User not logged in");
-                response.status(403).send('Failure')
+                response.status(403).send('Failure');
             });
     });
 
@@ -91,7 +91,7 @@ module.exports = function(app, db, aws) {
             }).
             catch(function(err) {
                 console.log("User not logged in");
-                response.status(403).send('Failure')
+                response.status(403).send('Failure');
             });
     });
 

@@ -24,14 +24,14 @@ var $ = function (db) {
             }
             done(err, user);
         });
-    };
+    }
 
     function loginWithSessionId(ssid, done) {
         var match = ssid.match(/^[-A-Za-z0-9+/=_]+$/m);
         if (!match) {
             console.log("Wrong ssid");
             done("Error");
-            return
+            return;
         }
         console.log("Trying deserialize session",ssid);
         sessions.findOne({"_id": ssid}, function(err, session) {
@@ -52,7 +52,7 @@ var $ = function (db) {
             if (user != undefined) {
                 deserialize(user, done);
             } else {
-                done("Wrong cookie")
+                done("Wrong cookie");
             }
 
             //done(err, rows[0]);
@@ -70,7 +70,7 @@ var $ = function (db) {
                     done(null, {
                         "token": res.token,
                         "tokenSecret": res.tokenSecret
-                    })
+                    });
                 } else {
                     done("No login with twitter");
                 }
@@ -94,7 +94,7 @@ var $ = function (db) {
         loginWithSessionId: loginWithSessionId,
         getTwitterCredentials: getTwitterCredentials,
         getLoggedInUser: getLoggedInUser
-    }
+    };
 
 
 
