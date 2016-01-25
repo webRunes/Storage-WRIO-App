@@ -11,7 +11,7 @@ exports.init = function () {
     nconf.env().argv();
 
     var basedirPath = path.dirname(require.main.filename); // won't work with unit tests
-    nconf.file(path.resolve(__dirname, './config.json'));
+    nconf.file(path.resolve(__dirname, '../config.json'));
 
     // end nconf config
     return nconf;
