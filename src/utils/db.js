@@ -20,6 +20,6 @@ exports.mongo = function(args) {
             }
         });
     });
-}
+};
 
 

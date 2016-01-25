@@ -127,7 +127,7 @@ function expire(db) {
 
 
         } else {
-            console.log("No expired")
+            console.log("No expired");
         }
        // db.close();
 

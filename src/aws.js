@@ -139,4 +139,4 @@ module.exports.deleteFolder = function (id) {
         });
     });
 
-}
+};
