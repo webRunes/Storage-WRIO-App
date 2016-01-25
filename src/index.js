@@ -5,7 +5,7 @@ var nconf = require("./wrio_nconf.js")
     .init();
 var DOMAIN = nconf.get("db:workdomain");
 var aws = require("./aws.js");
-
+var path = require('path');
 
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
@@ -68,8 +68,9 @@ function server_setup(db) {
 
     app.get('/', function(request, response) {
 
-        response.sendFile(__dirname +
-            '/hub/index.htm');
+        response.sendFile("index.htm",{
+            root: path.join(__dirname, '..', '/hub/')
+        });
 
     });
 
