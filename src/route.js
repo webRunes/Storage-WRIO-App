@@ -78,7 +78,7 @@ module.exports = function(app, db, aws) {
             });
     });
 
-    app.post('/api/delete_templates', wrioLogin.authS2S, function(request,response) {
+    app.post('/api/delete_folder', wrioLogin.authS2S, function(request,response) {
 
         var itemsToDelete = request.body.items;
         console.log(itemsToDelete);
