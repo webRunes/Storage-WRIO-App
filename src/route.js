@@ -3,7 +3,6 @@ module.exports = function(app, db, aws) {
         .init();
     var DOMAIN = nconf.get("db:workdomain");
 
-
     var wrioLogin = require('./wriologin.js')(db);
 
     // *******
@@ -79,20 +78,17 @@ module.exports = function(app, db, aws) {
             });
     });
 
-    app.get('/api/delete_templates',function(request,response) {
-        var sid = request.query.sid || '';
-        wrioLogin.getLoggedInUser(request.sessionID).
-            then(function(user) {
-                if (!user) {
-                    throw new Error("Got no user");
-                }
-                aws.deleteFolder(user.wrioID);
-                response.send('OK');
-            }).
-            catch(function(err) {
-                console.log("User not logged in");
-                response.status(403).send('Failure');
+    app.post('/api/delete_folder', wrioLogin.authS2S, function(request,response) {
+
+        var itemsToDelete = request.body.items;
+        console.log(itemsToDelete);
+        if (itemsToDelete) {
+            itemsToDelete.forEach(function(item) {
+                console.log("Deleting", item);
+                aws.deleteFolder(item);
             });
+        }
+        response.send('OK');
     });
 
 
