@@ -34,18 +34,19 @@
     "xmlbuilder": "^4.1.0"
   },
   "devDependencies": {
+    "babel-eslint": "*",
+    "basic-auth": "^1.0.3",
+    "eslint": "^1.4.3",
+    "eslint-plugin-ideal": "^0.1.2",
+    "eslint-plugin-react": "^3.1.0",
+    "gulp": "^3.9.0",
+    "gulp-eslint": "*",
+    "gulp-mocha": "^2.2.0",
+    "gulp-nodemon": "^2.0.4",
     "mocha": "^2.2.5",
     "should": "^6.0.3",
     "supertest": "^1.0.1",
-    "supertest-session": "^1.0.0",
-    "gulp": "^3.9.0",
-    "gulp-mocha": "^2.2.0",
-    "gulp-nodemon": "^2.0.4",
-    "eslint": "^1.4.3",
-    "gulp-eslint": "*",
-    "babel-eslint": "*",
-    "eslint-plugin-ideal": "^0.1.2",
-    "eslint-plugin-react": "^3.1.0"
+    "supertest-session": "^1.0.0"
   },
   "scripts": {
     "start": "gulp lint && echo \"Build Completed.\" ",

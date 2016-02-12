@@ -8,6 +8,7 @@ var nconf = require("./wrio_nconf.js")
 
 var Promise =  require('es6-promise').Promise;
 var EXPIRY_TIME = 30*24*60*60*1000; // account expiry time
+var auth = require('basic-auth');
 
 var $ = function (db) {
     var webrunesUsers = db.collection('webRunes_Users');
@@ -90,7 +91,23 @@ var $ = function (db) {
         });
     }
 
+    function authS2S(request,response,next) {
+        var creds = auth(request);
+        var login = nconf.get("service2service:login");
+        var password = nconf.get("service2service:password");
+        if (creds && login && password) {
+            if ((creds.name === login) && (creds.pass === password)) {
+                next();
+                return;
+            }
+        }
+        console.log("Access denied");
+        response.status(403).send("Access denied");
+    }
+
+
     return {
+        authS2S: authS2S,
         loginWithSessionId: loginWithSessionId,
         getTwitterCredentials: getTwitterCredentials,
         getLoggedInUser: getLoggedInUser
