@@ -65,5 +65,34 @@ describe("API unit tests", function() {
             });
     });
 
+    it ("should raise error when trying to delete file without credentials", function (done) {
+        request(app)
+            .post('/api/delete_folder')
+            .expect(403)
+            .end(done);
+    });
+
+
+    it ("should raise error when trying to delete file with wrong login and password", function (done) {
+        request(app)
+            .post('/api/delete_folder')
+            .auth('the-username', 'the-password')
+            .expect(403)
+            .end(done);
+    });
+
+    it ("should raise error when trying to delete file with wrong login and password", function (done) {
+        var nconf = require('../src/wrio_nconf.js').init();
+        var req = {
+          items: ["232323232"]
+        };
+        request(app)
+            .post('/api/delete_folder')
+            .set('Content-Type', "application/json")
+            .auth(nconf.get("service2service:login"), nconf.get("service2service:password"))
+            .send(JSON.stringify(req))
+            .expect(200)
+            .end(done);
+    });
 
 });

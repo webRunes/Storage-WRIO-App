@@ -25,4 +25,4 @@ deploy:
       secure: feP/uOy9aWA4Rvpz0wQptgg/vV6xoMd8B2wCBJORvPZf1DJsKnTqa69Uk2ISsY9IfVwyIszSqBqDXAY+YGUgEHorw/x6akG2HOZI8lwdkTVQccldxOExLBU4i5FMSa/8UIArTKP14n4aen7ZkyjXkBlH5BXmJPnA13aye/LxpfM=
     bucket: wrioos.com
     upload-dir: Storage-WRIO-App
-    acl: public_read
+    acl: public_read 
