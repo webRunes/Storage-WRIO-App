@@ -59,23 +59,14 @@ module.exports = function(app, db, aws) {
 
     });
 
-    app.get('/api/save_templates',function(request,response) {
-        var sid = request.query.sid || '';
-        wrioLogin.getLoggedInUser(sid).
-            then(function(user) {
-                if (!user) {
-                    throw new Error("Got no user");
-                }
-                if (user.wrioID) {
-                    console.log("Creating S3 templates for ",user.wrioID);
-                    aws.createTemplates(user.wrioID);
-                }
-                response.send('OK');
-            }).
-            catch(function(err) {
-                console.log("User not logged in");
-                response.status(403).send('Failure');
-            });
+    app.get('/api/save_templates', wrioLogin.authS2S, function(request,response) {
+        var wrioID = request.query.wrioID;
+        if (!wrioID) {
+            return response.status(403).send("Wrong parametes");
+        }
+        console.log("Creating S3 templates for ",wrioID);
+        aws.createTemplates(wrioID);
+        response.send('OK');
     });
 
     app.post('/api/delete_folder', wrioLogin.authS2S, function(request,response) {
