@@ -62,7 +62,7 @@ module.exports = function(app, db, aws) {
     app.get('/api/save_templates', wrioLogin.authS2S, function(request,response) {
         var wrioID = request.query.wrioID;
         if (!wrioID) {
-            return response.status(403).send("Wrong parametes");
+            return response.status(403).send("Wrong parameters");
         }
         console.log("Creating S3 templates for ",wrioID);
         aws.createTemplates(wrioID);
