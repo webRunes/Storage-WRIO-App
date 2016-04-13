@@ -42,7 +42,7 @@ module.exports = function(app, db, aws) {
 
         wrioLogin.loginWithSessionId(request.sessionID, function(err, id) {
             console.log("Got user profile", id);
-            aws.saveFile(id, url, bodyData, function(err, res) {
+            aws.saveFile(id.wrioID, url, bodyData, function(err, res) {
                 if (err) {
                     response.send({
                         "error": 'Not authorized'
