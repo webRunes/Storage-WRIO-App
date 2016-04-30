@@ -55,7 +55,7 @@ module.exports.createTemplates = function (userID) {
     //console.log("UT:",userTemplate);
     var params = {
         Body:userTemplate,
-        Key:userID+"/index.htm",
+        Key:userID+"/index.html",
         ACL:'public-read',
         ContentType:"text/html"
     };
@@ -68,7 +68,7 @@ module.exports.createTemplates = function (userID) {
 
     params = {
         Body:coverTemplate,
-        Key:userID+"/cover.htm",
+        Key:userID+"/cover.html",
         ACL:'public-read',
         ContentType:"text/html"
     };
@@ -81,7 +81,7 @@ module.exports.createTemplates = function (userID) {
 
     params = {
         Body:plusTemplate,
-        Key:userID+"/Plus-WRIO-App/index.htm",
+        Key:userID+"/Plus-WRIO-App/index.html",
         ACL:'public-read',
         ContentType:"text/html"
     };
