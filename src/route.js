@@ -3,7 +3,7 @@ module.exports = function(app, db, aws) {
         .init();
     var DOMAIN = nconf.get("db:workdomain");
 
-    var wrioLogin = require('./wriologin.js')(db);
+    var wrioLogin = require('wriocommon').login;
 
     // *******
     // http://storage.webrunes.com/api/save
@@ -14,7 +14,7 @@ module.exports = function(app, db, aws) {
 
     // POST REQUEST
 
-    app.post('/api/save', function(request, response) {
+    app.post('/api/save', wrioLogin.wrioAuth, function(request, response) {
         console.log("Save API called");
         response.set('Content-Type', 'application/json');
         console.log(request.sessionID);
@@ -30,32 +30,22 @@ module.exports = function(app, db, aws) {
             });
             return;
         }
-
-        if (!request.sessionID) {
-            console.log("No session data");
-            response.status(401);
-            response.send({
-                "error": 'Not authorized'
-            });
-            return;
-        }
-
-        wrioLogin.loginWithSessionId(request.sessionID, function(err, id) {
-            console.log("Got user profile", id);
-            aws.saveFile(id.wrioID, url, bodyData, function(err, res) {
-                if (err) {
-                    response.send({
-                        "error": 'Not authorized'
-                    });
-                    return;
-                }
+        var id = request.user;
+        console.log("Got user profile", id);
+        aws.saveFile(id.wrioID, url, bodyData, function(err, res) {
+            if (err) {
                 response.send({
-                    "result": "success",
-                    "url": res.replace('https://s3.amazonaws.com/wr.io/', 'https://wr.io/')
+                    "error": 'Not authorized'
                 });
+                return;
+            }
+            response.send({
+                "result": "success",
+                "url": res.replace('https://s3.amazonaws.com/wr.io/', 'https://wr.io/')
             });
-
         });
+
+
 
     });
 
