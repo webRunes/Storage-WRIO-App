@@ -20,7 +20,7 @@ function download(url,callback) {
 }
 
 
-download("Storage-WRIO-App/default/index.htm",function(err,res) {
+download("Storage-WRIO-App/default/index.html",function(err,res) {
     if (err) {
         console.log("Can't get index template ",err);
         return;
@@ -28,7 +28,7 @@ download("Storage-WRIO-App/default/index.htm",function(err,res) {
     indexTemplate = res.Body.toString();
 });
 
-download("Plus-WRIO-App/default/index.htm",function(err,res) {
+download("Plus-WRIO-App/default/index.html",function(err,res) {
     if (err) {
         console.log("Can't get index template ",err);
         return;
@@ -37,7 +37,7 @@ download("Plus-WRIO-App/default/index.htm",function(err,res) {
     console.log("Plus template loaded");
 });
 
-download("Storage-WRIO-App/default/cover.htm",function(err,res) {
+download("Storage-WRIO-App/default/cover.html",function(err,res) {
     if (err) {
         console.log("Can't get cover template ",err);
         return;
