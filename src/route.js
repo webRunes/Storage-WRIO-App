@@ -46,7 +46,12 @@ module.exports = function(app, db, aws) {
         });
 
 
+    });
 
+    app.get('/api/overwrite_templates', wrioLogin.wrioAuth, function(request, response) {
+        console.log('Inititiaing logs overwrite for ', request.user.wrioID);
+        aws.createTemplates(request.user.wrioID);
+        response.send('Templates overwritten');
     });
 
     app.get('/api/save_templates', wrioLogin.authS2S, function(request,response) {
