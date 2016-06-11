@@ -39,7 +39,7 @@ function server_setup(db) {
 
     app.get('/', function(request, response) {
 
-        response.sendFile("index.htm",{
+        response.sendFile("index.html",{
             root: path.join(__dirname, '..', '/hub/')
         });
 
