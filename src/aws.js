@@ -1,7 +1,3 @@
-/**
- * Created by mich.bil on 18.05.15.
- */
-
 var AWS = require('aws-sdk');
 var nconf = require("./wrio_nconf.js").init();
 var keyid = nconf.get("aws:aws_access_key_id"), secret = nconf.get("aws:aws_secret_access_key");
@@ -15,45 +11,51 @@ var coverTemplate = "cover loading...";
 var plusTemplate = "plus loading...";
 // get templates we will be working on
 
-var params = {
-    Bucket: 'wrioos.com',
-    Key: "Login-WRIO-App/default/index.htm"
-};
-s3.getObject(params,function(err,res) {
+function download(url,callback) {
+    var params = {
+        Bucket: 'wrioos.com',
+        Key: url
+    };
+    s3.getObject(params,callback);
+}
+
+
+download("Storage-WRIO-App/default/index.html",function(err,res) {
     if (err) {
         console.log("Can't get index template ",err);
         return;
     }
     indexTemplate = res.Body.toString();
 });
-params = {
-    Bucket: 'wrioos.com',
-    Key: "Login-WRIO-App/default/cover.htm"
-};
-s3.getObject(params,function(err,res) {
+
+download("Plus-WRIO-App/default/index.html",function(err,res) {
     if (err) {
         console.log("Can't get index template ",err);
         return;
     }
-    coverTemplate = res.Body.toString();
+    plusTemplate = res.Body.toString();
+    console.log("Plus template loaded");
 });
-params = {
-    Bucket: 'wrioos.com',
-    Key: "Default-WRIO-Theme/widget/defaultList.htm"
-};
-s3.getObject(params,function(err,res) {
+
+download("Storage-WRIO-App/default/cover.html",function(err,res) {
     if (err) {
-        console.log("Can't get index template ",err);
+        console.log("Can't get cover template ",err);
         return;
     }
     coverTemplate = res.Body.toString();
 });
+
 
 module.exports.createTemplates = function (userID) {
 
+    var domain = nconf.get("db:workdomain").replace(".",'');
+    var userTemplate = indexTemplate.replace(/\{\{domain}}/g,'https://wr.io/'+userID)
+        .replace(/\{\{ wrio_id }}/g,userID);
+
+    //console.log("UT:",userTemplate);
     var params = {
-        Body:indexTemplate,
-        Key:userID+"/index.htm",
+        Body:userTemplate,
+        Key:userID+"/index.html",
         ACL:'public-read',
         ContentType:"text/html"
     };
@@ -62,12 +64,11 @@ module.exports.createTemplates = function (userID) {
         if (err) {
             console.log(err);
         }
-        console.log(res);
     });
 
     params = {
         Body:coverTemplate,
-        Key:userID+"/cover.htm",
+        Key:userID+"/cover.html",
         ACL:'public-read',
         ContentType:"text/html"
     };
@@ -76,12 +77,11 @@ module.exports.createTemplates = function (userID) {
         if (err) {
             console.log(err);
         }
-        console.log(res);
     });
 
     params = {
         Body:plusTemplate,
-        Key:userID+"/Plus-WRIO-App/index.htm",
+        Key:userID+"/Plus-WRIO-App/index.html",
         ACL:'public-read',
         ContentType:"text/html"
     };
@@ -90,7 +90,6 @@ module.exports.createTemplates = function (userID) {
         if (err) {
             console.log(err);
         }
-        console.log(res);
     });
 
 };
@@ -115,4 +114,29 @@ module.exports.saveFile = function (userID,path,file,done) {
     });
 
 };
+module.exports.deleteFolder = function (id) {
 
+    var params = {
+        Bucket: 'wr.io',
+        Prefix: id + '/'
+    };
+
+    s3.listObjects(params, function (err, data) {
+        if (err) return console.log(err);
+
+        params = {Bucket: 'wr.io'};
+        params.Delete = {};
+        params.Delete.Objects = [];
+
+        data.Contents.forEach(function (content) {
+            params.Delete.Objects.push({Key: content.Key});
+        });
+
+        s3.deleteObjects(params, function (err, data) {
+            if (err) return console.log(err);
+
+            return console.log(data.Deleted.length);
+        });
+    });
+
+};

@@ -12,10 +12,25 @@ var stdout_write = process.stdout._write,
 process.stdout._write = stdout_write;
 process.stderr._write = stderr_write;
 
+var Session = require('supertest-session')({
+    app: require('../server.js')
+});
+
+var ready = false;
+app.ready = function() {
+    ready = true;
+};
 
 describe("API unit tests", function() {
-    before(function(done) {
-        setTimeout(done,2000);
+    before(function (done) {
+        setInterval(function() {
+            if (ready) {
+                console.log("App ready, starting tests");
+                done();
+                clearInterval(this);
+            }
+
+        }, 1000);
     });
     it("should successfully upload file to storage",function(done) {
         postdata = {
@@ -50,24 +65,34 @@ describe("API unit tests", function() {
             });
     });
 
-    it("should return user temporary profile via api", function (done) {
+    it ("should raise error when trying to delete file without credentials", function (done) {
         request(app)
-            .post('/api/get_profile')
-            .expect('Content-Type', /json/)
-            .expect(200)
-            .end(function (err, res) {
-                if (err) throw err;
-                var resp = res.body;
-                console.log(resp);
-
-                should(resp).have.property("result","success");
-                should(resp).have.property("temporary",true);
-                should(resp).have.property("days",30);
-
-                var id = resp.id.toString();
-                should(id.length).equal(12); // there must be 12 digit id
-
-                done();
-            });
+            .post('/api/delete_folder')
+            .expect(403)
+            .end(done);
     });
+
+
+    it ("should raise error when trying to delete file with wrong login and password", function (done) {
+        request(app)
+            .post('/api/delete_folder')
+            .auth('the-username', 'the-password')
+            .expect(403)
+            .end(done);
+    });
+
+    it ("should raise error when trying to delete file with wrong login and password", function (done) {
+        var nconf = require('../src/wrio_nconf.js').init();
+        var req = {
+          items: ["232323232"]
+        };
+        request(app)
+            .post('/api/delete_folder')
+            .set('Content-Type', "application/json")
+            .auth(nconf.get("service2service:login"), nconf.get("service2service:password"))
+            .send(JSON.stringify(req))
+            .expect(200)
+            .end(done);
+    });
+
 });

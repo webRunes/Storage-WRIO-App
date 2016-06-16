@@ -1,15 +1,28 @@
 language: node_js
+sudo: false
 
 node_js:
-  - 0.10
+  - 0.12
 
 install : npm install
 script  : npm start
 
+before_deploy:
+- gem install mime-types -v 2.6.2
+
+
 deploy:
-  provider: opsworks
-  access_key_id:
-    secure: TicDHBPmhH0o9dS5ClsMRyYxI2vWYHtW/jaVUC0TVOnRRD4hnNrgEwLSVcQwnPFwPlL3jbep1or8XWjcECHortE4N3foJcutBonufZ53oq6+GojDdO6efR4hapa8TgAIWSsceD+1XSdfQUpIafK07QWUNKEC684+Meb9Uz7TOto=
-  secret_access_key:
-    secure: YHxhDWtmblCtD5aqe67Z1/YhgpGqok0k3eN0pHNrmEJx1s0eUgQk9F7m3kGVgbk8JfzxrQ6EKlWapihJ3bg/vf9VjaN/NSgZqbO9QeIr95wC6YTlAfX65KPr3V7UnHtEYl0EgcKU2sfgoZvWcn999adWmFaITi1dcGzQLBCLb9k=
-  app-id: 6e01127a-61aa-450f-b054-1fa116003147
+  - provider: opsworks
+    access_key_id:
+      secure: TicDHBPmhH0o9dS5ClsMRyYxI2vWYHtW/jaVUC0TVOnRRD4hnNrgEwLSVcQwnPFwPlL3jbep1or8XWjcECHortE4N3foJcutBonufZ53oq6+GojDdO6efR4hapa8TgAIWSsceD+1XSdfQUpIafK07QWUNKEC684+Meb9Uz7TOto=
+    secret_access_key:
+      secure: YHxhDWtmblCtD5aqe67Z1/YhgpGqok0k3eN0pHNrmEJx1s0eUgQk9F7m3kGVgbk8JfzxrQ6EKlWapihJ3bg/vf9VjaN/NSgZqbO9QeIr95wC6YTlAfX65KPr3V7UnHtEYl0EgcKU2sfgoZvWcn999adWmFaITi1dcGzQLBCLb9k=
+    app-id: 6e01127a-61aa-450f-b054-1fa116003147
+  - provider: s3
+    access_key_id:
+      secure: FUPq2g9wtMRiOFlNYWtVmU1fzKPu4OSXGtlynkmuWgMMQ0U7HnBquE/lKQPElCqrpFs5kW2zdqEqyKZNgUZPLVTENT5RDTHKCSDC90vG94n6Q+EtpX6WJbugoN7rGeJFUO72iuWX0R5o2QY97VjXsgY6ntpp8mH+EcEpet3W5sg=
+    secret_access_key:
+      secure: feP/uOy9aWA4Rvpz0wQptgg/vV6xoMd8B2wCBJORvPZf1DJsKnTqa69Uk2ISsY9IfVwyIszSqBqDXAY+YGUgEHorw/x6akG2HOZI8lwdkTVQccldxOExLBU4i5FMSa/8UIArTKP14n4aen7ZkyjXkBlH5BXmJPnA13aye/LxpfM=
+    bucket: wrioos.com
+    upload-dir: Storage-WRIO-App
+    acl: public_read 
