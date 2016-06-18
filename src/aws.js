@@ -28,6 +28,14 @@ download("Storage-WRIO-App/default/index.html",function(err,res) {
     indexTemplate = res.Body.toString();
 });
 
+download("Storage-WRIO-App/default/cover/index.html", function (err, res) {
+    if (err) {
+        console.log("Can't get cover template ", err);
+        return;
+    }
+    coverTemplate = res.Body.toString();
+});
+
 download("Plus-WRIO-App/default/index.html",function(err,res) {
     if (err) {
         console.log("Can't get index template ",err);
@@ -35,14 +43,6 @@ download("Plus-WRIO-App/default/index.html",function(err,res) {
     }
     plusTemplate = res.Body.toString();
     console.log("Plus template loaded");
-});
-
-download("Storage-WRIO-App/default/cover.html",function(err,res) {
-    if (err) {
-        console.log("Can't get cover template ",err);
-        return;
-    }
-    coverTemplate = res.Body.toString();
 });
 
 
@@ -68,7 +68,7 @@ module.exports.createTemplates = function (userID) {
 
     params = {
         Body:coverTemplate,
-        Key:userID+"/cover.html",
+        Key:userID+"/cover/index.html",
         ACL:'public-read',
         ContentType:"text/html"
     };
