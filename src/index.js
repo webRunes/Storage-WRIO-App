@@ -36,16 +36,8 @@ function server_setup(db) {
 
     app.set('views', __dirname + '/views');
     app.set('view engine', 'ejs');
-
-    app.get('/', function(request, response) {
-
-        response.sendFile("index.html",{
-            root: path.join(__dirname, '..', '/hub/')
-        });
-
-    });
-
     require('./route')(app, db, aws);
+    app.use('/', express.static(path.join(__dirname, '..', '/hub/')));
 }
 
 module.exports = app;
