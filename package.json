@@ -23,6 +23,7 @@
     "babel-preset-stage-0": "^6.5.0",
     "babelify": "^7.3.0",
     "gulp": "^3.9.0",
+    "gulp-babel": "^6.1.2",
     "gulp-eslint": "2.0.0",
     "babel-eslint": "5.0.0",
     "gulp-mocha": "^2.2.0",
