@@ -1,23 +1,24 @@
-language: node_js
-sudo: false
+language: ruby
 
-node_js:
-  - 0.12
+services:
+  - docker
 
-install : npm install
-script  : npm start
+before_install:
+  - docker build --tag storage .
+  - docker run -v `pwd`:/srv/host storage /bin/sh -c "gulp lint"
 
-before_deploy:
-- gem install mime-types -v 2.6.2
+script:
+  - docker ps -a
 
+branches:
+  only:
+    - master
+    - production
+
+notifications:
+  slack: wrioos:XDZWFBrf9TDtoEOcw5YGBM4a
 
 deploy:
-  - provider: opsworks
-    access_key_id:
-      secure: TicDHBPmhH0o9dS5ClsMRyYxI2vWYHtW/jaVUC0TVOnRRD4hnNrgEwLSVcQwnPFwPlL3jbep1or8XWjcECHortE4N3foJcutBonufZ53oq6+GojDdO6efR4hapa8TgAIWSsceD+1XSdfQUpIafK07QWUNKEC684+Meb9Uz7TOto=
-    secret_access_key:
-      secure: YHxhDWtmblCtD5aqe67Z1/YhgpGqok0k3eN0pHNrmEJx1s0eUgQk9F7m3kGVgbk8JfzxrQ6EKlWapihJ3bg/vf9VjaN/NSgZqbO9QeIr95wC6YTlAfX65KPr3V7UnHtEYl0EgcKU2sfgoZvWcn999adWmFaITi1dcGzQLBCLb9k=
-    app-id: 6e01127a-61aa-450f-b054-1fa116003147
   - provider: s3
     access_key_id:
       secure: FUPq2g9wtMRiOFlNYWtVmU1fzKPu4OSXGtlynkmuWgMMQ0U7HnBquE/lKQPElCqrpFs5kW2zdqEqyKZNgUZPLVTENT5RDTHKCSDC90vG94n6Q+EtpX6WJbugoN7rGeJFUO72iuWX0R5o2QY97VjXsgY6ntpp8mH+EcEpet3W5sg=
