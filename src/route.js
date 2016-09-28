@@ -1,9 +1,9 @@
-module.exports = function(app, db, aws) {
-    var nconf = require("./wrio_nconf.js")
-        .init();
-    var DOMAIN = nconf.get("db:workdomain");
+const nconf = require("./wrio_nconf.js").init();
+const DOMAIN = nconf.get("db:workdomain");
+const wrioLogin = require('wriocommon').login;
+const localdev = require('./localdev');
 
-    var wrioLogin = require('wriocommon').login;
+module.exports = function(app, db, aws) {
 
     // *******
     // http://storage.webrunes.com/api/save
@@ -13,14 +13,47 @@ module.exports = function(app, db, aws) {
     // bodyData : target body
 
     // POST REQUEST
+    console.log(DOMAIN);
+    if (DOMAIN === ".wrioos.local") {
+        app.post('/api/saveLocal', wrioLogin.wrioAuth, function(request, response) {
+            console.log("Save API called");
+            response.set('Content-Type', 'application/json');
+
+            const url = request.body.url;
+            const bodyData = request.body.bodyData;
+
+            if (!url || !bodyData) {
+                console.log("Wrong parameters");
+                response.status(403);
+                response.send({
+                    "error": 'Wrong parameters'
+                });
+                return;
+            }
+            const id = request.user;
+            //console.log("Got user profile", id);
+            localdev.saveFile(id.wrioID, url, bodyData, function(err, res) {
+                if (err) {
+                    response.send({
+                        "error": 'Not authorized'
+                    });
+                    return;
+                }
+                response.send({
+                    "result": "success",
+                    "url": 'http://wrioos.local/hub/'+url
+                });
+            });
+        });
+    }
 
     app.post('/api/save', wrioLogin.wrioAuth, function(request, response) {
         console.log("Save API called");
         response.set('Content-Type', 'application/json');
         console.log(request.sessionID);
 
-        var url = request.body.url;
-        var bodyData = request.body.bodyData;
+        const url = request.body.url;
+        const bodyData = request.body.bodyData;
 
         if (!url || !bodyData) {
             console.log("Wrong parameters");
@@ -30,8 +63,8 @@ module.exports = function(app, db, aws) {
             });
             return;
         }
-        var id = request.user;
-        console.log("Got user profile", id);
+        const id = request.user;
+        //console.log("Got user profile", id);
         aws.saveFile(id.wrioID, url, bodyData, function(err, res) {
             if (err) {
                 response.send({
@@ -44,8 +77,6 @@ module.exports = function(app, db, aws) {
                 "url": res.replace('https://s3.amazonaws.com/wr.io/', 'https://wr.io/')
             });
         });
-
-
     });
 
     app.get('/api/overwrite_templates', wrioLogin.wrioAuth, function(request, response) {
