@@ -79,6 +79,36 @@ module.exports = function(app, db, aws) {
         });
     });
 
+    app.post('/api/delete', wrioLogin.wrioAuth, function(request, response) {
+        console.log("Save API called");
+        response.set('Content-Type', 'application/json');
+        console.log(request.sessionID);
+
+        const url = request.body.url;
+
+        if (!url) {
+            console.log("Wrong parameters");
+            response.status(403);
+            response.send({
+                "error": 'Wrong parameters'
+            });
+            return;
+        }
+        const id = request.user;
+        aws.deleteFile(id.wrioID,url, function(err, res) {
+            if (err) {
+                response.send({
+                    "error": 'Not authorized'
+                });
+                return;
+            }
+            console.log(res);
+            response.send({
+                "result": "success"
+            });
+        });
+    });
+
     app.get('/api/overwrite_templates', wrioLogin.wrioAuth, function(request, response) {
         console.log('Inititiaing logs overwrite for ', request.user.wrioID);
         aws.createTemplates(request.user.wrioID);
