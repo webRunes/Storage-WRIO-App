@@ -114,6 +114,27 @@ module.exports.saveFile = function (userID,path,file,done) {
     });
 
 };
+
+
+module.exports.deleteFile = function (userID, path,done) {
+
+    var params = {
+        Bucket: 'wr.io',
+        Key:userID+'/'+path
+    };
+
+    s3.deleteObject(params,function (err,res) {
+        if (err) {
+            console.log(err);
+            done("Cant write file");
+            return;
+        }
+        console.log("File uploaded to s3",res);
+        done(null,res.Location);
+    });
+
+};
+
 module.exports.deleteFolder = function (id) {
 
     var params = {
