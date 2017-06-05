@@ -1,10 +1,10 @@
-var express = require('express');
-var nconf = require("./wrio_nconf.js")
+const express = require('express');
+const nconf = require("./wrio_nconf.js")
     .init();
-var DOMAIN = nconf.get("db:workdomain");
-var aws = require("./aws.js");
-var path = require('path');
-
+const DOMAIN = nconf.get("db:workdomain");
+const aws = require("./aws.js");
+const path = require('path');
+const plusStorage = require('./plusStorage');
 
 
 var wriocommon = require('wriocommon');
@@ -28,8 +28,7 @@ dbLib.init().then(function(dbInst) {
     app.ready(db);
 }).catch(function(err) {
     dumpError(err);
-
-});;
+});
 
 
 function server_setup(db) {
@@ -38,6 +37,7 @@ function server_setup(db) {
     app.set('view engine', 'ejs');
     require('./route')(app, db, aws);
     app.use('/', express.static(path.join(__dirname, '..', '/hub/')));
+    app.use(plusStorage(db));
 }
 
 module.exports = app;
