@@ -1,8 +1,8 @@
 const express = require('express');
-const nconf = require("./wrio_nconf.js")
+const nconf = require('./wrio_nconf')
     .init();
 const DOMAIN = nconf.get("db:workdomain");
-const aws = require("./aws.js");
+const aws = require('./aws');
 const path = require('path');
 const plusStorage = require('./plusStorage');
 

@@ -11,12 +11,20 @@ var coverTemplate = "cover loading...";
 var plusTemplate = "plus loading...";
 // get templates we will be working on
 
-function download(url,callback) {
+function downloadList(url, callback) {
+    var params = {
+        Bucket: 'wr.io',
+        Key: url
+    };
+    s3.getObject(params, callback);
+}
+
+function download(url, callback) {
     var params = {
         Bucket: 'wrioos.com',
         Key: url
     };
-    s3.getObject(params,callback);
+    s3.getObject(params, callback);
 }
 
 
@@ -161,3 +169,5 @@ module.exports.deleteFolder = function (id) {
     });
 
 };
+
+module.exports.downloadList = downloadList;

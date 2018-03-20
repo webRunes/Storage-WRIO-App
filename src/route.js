@@ -2,6 +2,7 @@ const nconf = require("./wrio_nconf.js").init();
 const DOMAIN = nconf.get("db:workdomain");
 const wrioLogin = require('wriocommon').login;
 const localdev = require('./localdev');
+const updateListHtml = require('./update_list_html');
 
 module.exports = function(app, db, aws) {
 
@@ -64,18 +65,29 @@ module.exports = function(app, db, aws) {
             return;
         }
         const id = request.user;
+        const wrioID = id.wrioID;
         //console.log("Got user profile", id);
-        aws.saveFile(id.wrioID, url, bodyData, function(err, res) {
+        aws.saveFile(wrioID, url, bodyData, function(err, res) {
             if (err) {
                 response.send({
-                    "error": 'Not authorized'
+                    'error': 'Not authorized'
                 });
                 return;
             }
-            response.send({
-                "result": "success",
-                "url": res.replace('https://s3.amazonaws.com/wr.io/', 'https://wr.io/')
-            });
+            const link = res.replace('https://s3.amazonaws.com/wr.io/', 'https://wr.io/');
+
+            updateListHtml(aws, wrioID, link, err =>
+              response.send(
+                err
+                  ? {
+                      error: 'Update list.html failed'
+                    }
+                  : {
+                      result: 'success',
+                      url: link
+                    }
+              )
+            );
         });
     });
 
