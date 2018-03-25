@@ -4,11 +4,11 @@ const
   request = require('superagent'),
   html2list = require('../src/utils/html2list');
   wrioID = '101144381240',
-  name = Math.random(),
+  name = 'Untitled',
   link = ['https://wr.io', wrioID, name, 'index.html'].join('/');
 
 describe('List of article links: list.html', () =>
-  it('Add new link', done =>
+  it('Should not have duplicated article with title "Untitled"', done =>
     updateListHtml(aws, wrioID, link, () =>
       request('GET', 'https://s3.amazonaws.com/wr.io/' + wrioID + '/list.html').end((err, data) =>
         done(
