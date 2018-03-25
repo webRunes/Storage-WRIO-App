@@ -1,5 +1,5 @@
 const
-  updateCurrentList = require('./utils/update_current_list'),
+  updateCurrentHtml = require('./utils/update_current_html'),
   empty = require('./models/list.html');
 
 
@@ -12,7 +12,7 @@ module.exports = (aws, wrioID, link, cb) => {
     aws.saveFile(
       wrioID,
       listName,
-      updateCurrentList(
+      updateCurrentHtml(
         err
           ? empty
           : typeof listHtml === 'object' && listHtml.Body && listHtml.Body.toString
