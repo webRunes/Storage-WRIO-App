@@ -3,6 +3,7 @@ const DOMAIN = nconf.get("db:workdomain");
 const wrioLogin = require('wriocommon').login;
 const localdev = require('./localdev');
 const updateListHtml = require('./update_list_html');
+const updateCommentId = require('./utils/comment_id/update_comment_id');
 
 module.exports = function(app, db, aws) {
 
@@ -150,6 +151,13 @@ module.exports = function(app, db, aws) {
         response.send('OK');
     });
 
+    app.post('/api/update_comment_id', wrioLogin.authS2S, (request, response) =>
+      updateCommentId(
+        request.body.url,
+        request.body.commentId,
+        () => response.end()
+      )
+    );
 
     app.get('/logoff', function(request, response) {
         console.log("Logoff called");
