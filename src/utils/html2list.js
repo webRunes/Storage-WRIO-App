@@ -1,4 +1,5 @@
 const
+  empty = require('../models/list.html'),
   html2list = (list, html, position) =>
     position + 18 === html.length
       ? list
@@ -20,4 +21,4 @@ const
         }();
 
 module.exports = html =>
-  html2list([], html, 0);
+  html2list([], html, empty.length - 18);
