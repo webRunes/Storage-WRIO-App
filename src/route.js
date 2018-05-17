@@ -71,15 +71,16 @@ module.exports = function(app, db, aws) {
         //console.log("Got user profile", id);
         aws.saveFile(wrioID, url, bodyData, function(err, res) {
             if (err) {
-                response.send({
-                    'error': 'Not authorized'
-                });
+
                 return;
             }
 
-            if (isCoverUrl(res)) return;
-
             const link = res.replace('https://s3.amazonaws.com/wr.io/', 'https://wr.io/');
+
+            if (isCoverUrl(res)) return response.send({
+              result: 'success',
+              url: link
+            });
 
             updateListHtml(aws, wrioID, link, err =>
               response.send(
