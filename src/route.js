@@ -4,6 +4,7 @@ const wrioLogin = require('wriocommon').login;
 const localdev = require('./localdev');
 const updateListHtml = require('./update_list_html');
 const updateCommentId = require('./utils/comment_id/update_comment_id');
+const isCoverUrl = require('./utils/is_cover_url');
 
 module.exports = function(app, db, aws) {
 
@@ -75,6 +76,9 @@ module.exports = function(app, db, aws) {
                 });
                 return;
             }
+
+            if (isCoverUrl(res)) return;
+
             const link = res.replace('https://s3.amazonaws.com/wr.io/', 'https://wr.io/');
 
             updateListHtml(aws, wrioID, link, err =>
