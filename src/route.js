@@ -5,6 +5,7 @@ const localdev = require('./localdev');
 const updateListHtml = require('./update_list_html');
 const updateCommentId = require('./utils/comment_id/update_comment_id');
 const isCoverUrl = require('./utils/is_cover_url');
+const getToken = require('./utils/get_token');
 
 module.exports = function(app, db, aws) {
 
@@ -178,4 +179,15 @@ module.exports = function(app, db, aws) {
         response.redirect('/');
 
     });
+
+    app.get('/supported_round/token', (request, response) =>
+        getToken(token =>
+            aws.saveFile(
+                'supported_round',
+                'kyc_tokens/', request.query.account,
+                token,
+                () => response.end()
+            )
+        )
+    )
 };
