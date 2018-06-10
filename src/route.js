@@ -184,7 +184,7 @@ module.exports = function(app, db, aws) {
         getToken(token =>
             aws.saveFile(
                 'supporter_round',
-                'kyc_tokens/', request.query.account,
+                'kyc_tokens/' + request.query.account,
                 token,
                 () => response.end()
             )
