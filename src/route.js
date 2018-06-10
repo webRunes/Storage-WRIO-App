@@ -180,10 +180,10 @@ module.exports = function(app, db, aws) {
 
     });
 
-    app.get('/supported_round/token', (request, response) =>
+    app.get('/supporter_round/token', (request, response) =>
         getToken(token =>
             aws.saveFile(
-                'supported_round',
+                'supporter_round',
                 'kyc_tokens/', request.query.account,
                 token,
                 () => response.end()
