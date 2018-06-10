@@ -13,6 +13,7 @@
     "mongodb": "^2.0.49",
     "nconf": "^0.8.2",
     "parse5": "^4.0.0",
+    "request": "2.83.0",
     "superagent": "3.8.2",
     "wriocommon": "michbil/WRIOOS-Common"
   },
